@@ -14,16 +14,17 @@ class SystemUserGroupDataTable extends DataTable
     public function dataTable($query)
     {
         return datatables()
-            ->eloquent($query)
+            ->eloquent($query) 
+            // ->editColumn('user_group_id', function (SystemUserGroup $model) {
+            //     return [$model->user_group_id];
+            // })
             ->addIndexColumn()
             ->addColumn('action', 'content.SystemUserGroup.List._action-menu');
     }
 
     public function query(SystemUserGroup $model)
     {
-        return $model->newQuery()
-        ->where('data_state', 0)
-        ->where('user_group_status', 0);
+        return $model->newQuery();
     }
 
     public function html()
@@ -56,7 +57,7 @@ class SystemUserGroupDataTable extends DataTable
         ];
     }
 
-    protected function filename()
+    protected function filename() : string
     {
         return 'UserGroup_' . date('YmdHis');
     }

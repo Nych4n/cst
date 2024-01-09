@@ -1,12 +1,14 @@
 <?php
 
 namespace App\Models;
-
+use App\Traits\CreatedUpdatedID;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class SystemUserGroup extends Model
 {
-
+    use HasFactory,SoftDeletes,CreatedUpdatedID;
     /**
      * The attributes that are mass assignable.
      *
