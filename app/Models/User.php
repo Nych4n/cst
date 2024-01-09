@@ -98,4 +98,7 @@ class User extends Authenticatable implements MustVerifyEmail
     public function branch() {
         return $this->belongsTo(CoreBranch::class,'branch_id','branch_id');
     }
+    public function group(){
+        return $this->belongsTo(SystemUserGroup::class,'user_group_id','user_group_id');
+    }
 }
