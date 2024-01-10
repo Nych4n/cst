@@ -15,20 +15,20 @@ class AcctJournalVoucherItemFactory extends Factory
     {
         $faker = \Faker\Factory::create();
         return [
-            'account_id' => AcctAccount::factory()->create()->account_id,
-            'journal_voucher_description' => $faker->sentence,
-            'journal_voucher_amount' => $faker->randomFloat(2, 10, 1000),
-            'account_id_status' => $faker->boolean,
-            'account_id_default_status' => $faker->boolean,
-            'journal_voucher_debit_amount' => $faker->randomFloat(2, 0, 500),
-            'journal_voucher_credit_amount' => $faker->randomFloat(2, 0, 500),
-            'reverse_state' => $faker->boolean,
-            'created_id' => $faker->numberBetween(1, 10),
-            'updated_id' => $faker->numberBetween(1, 10),
+            'journal_voucher_id' => null,
+            'account_id' => null,
+            'journal_voucher_description' => $this->faker->sentence,
+            'journal_voucher_amount' => $this->faker->randomFloat(2, 1, 1000),
+            'account_id_status' => $this->faker->boolean,
+            'account_id_default_status' => $this->faker->boolean,
+            'journal_voucher_debit_amount' => $this->faker->randomFloat(2, 1, 1000),
+            'journal_voucher_credit_amount' => $this->faker->randomFloat(2, 1, 1000),
+            'reverse_state' => $this->faker->boolean,
+            'created_id' => null,
+            'updated_id' => null,
             'deleted_id' => null,
-            'created_at' => $faker->dateTimeThisMonth,
-            'updated_at' => $faker->dateTimeThisMonth,
-            'deleted_at' => null,
+            'created_at' => now(),
+            'updated_at' => now(),
         ];
     }
 }
