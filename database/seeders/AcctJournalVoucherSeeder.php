@@ -2,10 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\AcctJournalVoucherItem;
 use Illuminate\Database\Seeder;
 use App\Models\AcctJournalVoucher;
+use Illuminate\Support\Facades\DB;
 
+use App\Models\AcctJournalVoucherItem;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
 class AcctJournalVoucherSeeder extends Seeder
@@ -20,5 +21,6 @@ class AcctJournalVoucherSeeder extends Seeder
         ->has(AcctJournalVoucherItem::factory()->count(1),'items')
         ->create();
         DB::unprepared(file_get_contents(database_path('migrations/create_trigger_acct_journal_voucher_item.sql')));
+        DB::unprepared(file_get_contents(database_path('migrations/create_trigger_acct_journal_voucher.sql')));
     }
 }
