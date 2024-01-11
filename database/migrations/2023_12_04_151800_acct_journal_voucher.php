@@ -14,6 +14,7 @@ return new class extends Migration
         if(!Schema::hasTable('acct_journal_voucher')) {
             Schema::create('acct_journal_voucher', function (Blueprint $table) {
                 $table->id('journal_voucher_id');
+                $table->unsignedInteger('branch_id')->nullable();
                 $table->unsignedBigInteger('client_id')->nullable();
                 $table->foreign('client_id')->references('client_id')->on('core_client')->onUpdate('cascade')->onDelete('set null');
                 $table->unsignedBigInteger('transaction_module_id')->nullable();

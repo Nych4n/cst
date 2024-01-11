@@ -17,14 +17,14 @@
                     <div class="row mb-6">
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Awal') }}</label>
-                            <input type="text" name="start_date" id="start_date"
+                            <input type="date" name="start_date" id="start_date"
                                 class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('start_date', empty($session['start_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['start_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Akhir') }}</label>
-                            <input type="text" name="end_date" id="end_date"
+                            <input type="date" name="end_date" id="end_date"
                                 class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('end_date', empty($session['end_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['end_date'])) ?? '') }}"
                                 autocomplete="off" />
@@ -102,6 +102,7 @@
                                     @php
                                         $i = 1;
                                     @endphp
+                                    $val;
                                     @foreach ($val->items as $row)
                                         @php
                                             if ($row['journal_voucher_debit_amount'] != 0) {

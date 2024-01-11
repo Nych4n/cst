@@ -16,10 +16,37 @@ use App\Models\PreferenceTransactionModule;
 
 class JournalVoucherController extends Controller
 {
+    // public function index()
+    // {
+    //     session()->forget('data_journalvoucher');
+    //     session()->forget('array_journalvoucher');
+    //     $session = session()->get('filter_journalvoucher');
+    //     if (empty($session['start_date'])) {
+    //         $start_date = date('Y-m-d');
+    //     } else {
+    //         $start_date = date('Y-m-d', strtotime($session['start_date']));
+    //     }
+    //     if (empty($session['end_date'])) {
+    //         $end_date = date('Y-m-d');
+    //     } else {
+    //         $end_date = date('Y-m-d', strtotime($session['end_date']));
+    //     }
+    //     $corebranch = CoreBranch::select('branch_id', 'branch_name')
+    //     ->get();
+    //     $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',1);
+    //     // ->where('journal_voucher_date','>=', $session['start_date']??Carbon::now()->format('Y-m-d'))
+    //     // ->where('journal_voucher_date','<=', $session['end_date']??Carbon::now()->format('Y-m-d'));
+    //     // if(!empty($session['branch_id'])) {
+    //     //     $acctjournalvoucher = $acctjournalvoucher->where('branch_id', $session['branch_id']);
+    //     // }
+    //     $acctjournalvoucher = $acctjournalvoucher->orderByDesc('created_at')->get();
+
+    //     return view('content.JournalVoucher.List.index',compact('session','corebranch','acctjournalvoucher'));
     public function index()
     {
         session()->forget('data_journalvoucher');
         session()->forget('array_journalvoucher');
+        // Session::forget('journal-token');
         $session = session()->get('filter_journalvoucher');
         if (empty($session['start_date'])) {
             $start_date = date('Y-m-d');
@@ -31,16 +58,29 @@ class JournalVoucherController extends Controller
         } else {
             $end_date = date('Y-m-d', strtotime($session['end_date']));
         }
-        $corebranch = CoreBranch::select('branch_id', 'branch_name')
-        ->get();
-        $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',1)
-        ->where('journal_voucher_date','>=', $session['start_date']??Carbon::now()->format('Y-m-d'))
-        ->where('journal_voucher_date','<=', $session['end_date']??Carbon::now()->format('Y-m-d'));
-        if(!empty($session['branch_id'])) {
-            $acctjournalvoucher = $acctjournalvoucher->where('branch_id', $session['branch_id']);
+        $branch_id          = auth()->user()->branch_id;
+        if($branch_id == 0){
+            $corebranch         = CoreBranch::get();
+        }else{
+            $corebranch         = CoreBranch::where('branch_id', $branch_id)
+            ->get();
         }
-        $acctjournalvoucher = $acctjournalvoucher->orderByDesc('created_at')->get();
+        $acctjournalvoucher = AcctJournalVoucherItem::select('acct_journal_voucher_item.journal_voucher_item_id', 'acct_journal_voucher_item.journal_voucher_description', 'acct_journal_voucher_item.journal_voucher_debit_amount', 'acct_journal_voucher_item.journal_voucher_credit_amount', 'acct_journal_voucher_item.account_id', 'acct_account.account_code', 'acct_account.account_name', 'acct_journal_voucher_item.account_id_status', 'acct_journal_voucher.transaction_module_code', 'acct_journal_voucher.journal_voucher_date', 'acct_journal_voucher.journal_voucher_id')
+        ->join('acct_journal_voucher','acct_journal_voucher_item.journal_voucher_id','=','acct_journal_voucher.journal_voucher_id')
+        ->join('acct_account','acct_journal_voucher_item.account_id','=','acct_account.account_id')
+        ->where('acct_journal_voucher.transaction_module_id', 1)
+        // ->where('acct_journal_voucher.data_state', 0)
+        ->where('acct_journal_voucher_item.journal_voucher_amount','<>', 0)
+        ->orderBy('acct_journal_voucher.created_at','DESC')
+        ->orderBy('acct_journal_voucher.journal_voucher_date','DESC')
+        ->where('acct_journal_voucher.journal_voucher_date','>=',$start_date)
+        ->where('acct_journal_voucher.journal_voucher_date','<=',$end_date);
+        // if(!empty($session['branch_id'])) {
+        //     $acctjournalvoucher = $acctjournalvoucher->where('acct_journal_voucher.branch_id', $session['branch_id']);
+        // }
+        $acctjournalvoucher = $acctjournalvoucher->get();
 
+        // dd($acctjournalvoucher);
         return view('content.JournalVoucher.List.index',compact('session','corebranch','acctjournalvoucher'));
     }
 
@@ -74,9 +114,9 @@ class JournalVoucherController extends Controller
             'created_id'					=> auth()->user()->user_id,
         );
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
 
             AcctJournalVoucher::create($data);
 
@@ -94,6 +134,7 @@ class JournalVoucherController extends Controller
                 if($val['journal_voucher_status'] == 0){
                     $data_debet =array(
                         'journal_voucher_id'			=> $journal_voucher_id,
+                        'branch_id'					    => $data['branch_id'],
                         'account_id'					=> $val['account_id'],
                         'journal_voucher_description'	=> $data['journal_voucher_description'],
                         'journal_voucher_amount'		=> $val['journal_voucher_amount'],
@@ -106,6 +147,7 @@ class JournalVoucherController extends Controller
                 } else {
                     $data_credit =array(
                         'journal_voucher_id'			=> $journal_voucher_id,
+                        'branch_id'					    => $data['branch_id'],
                         'account_id'					=> $val['account_id'],
                         'journal_voucher_description'	=> $data['journal_voucher_description'],
                         'journal_voucher_amount'		=> $val['journal_voucher_amount'],
@@ -118,20 +160,20 @@ class JournalVoucherController extends Controller
                 }
             }
 
-            DB::commit();
+            // DB::commit();
             $message = array(
                 'pesan' => 'Data Jurnal Umum berhasil ditambah',
                 'alert' => 'success',
             );
             return redirect('journal-voucher')->with($message);
-        } catch (\Exception $e) {
-            DB::rollback();
+        // } catch (\Exception $e) {
+        //     DB::rollback();
             $message = array(
                 'pesan' => 'Data Jurnal Umum gagal ditambah',
                 'alert' => 'error'
             );
             return redirect('journal-voucher')->with($message);
-        }
+        // }
 
     }
 
