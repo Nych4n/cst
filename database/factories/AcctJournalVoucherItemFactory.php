@@ -16,9 +16,10 @@ class AcctJournalVoucherItemFactory extends Factory
     public function definition(): array
     {
         $faker = \Faker\Factory::create();
+        $account = AcctAccount::factory()->create();
         return [
-            'journal_voucher_id' => null, // Adjust as needed
-            'account_id' => null, // Adjust as needed
+            'journal_voucher_id' => null,
+            'account_id' => $account->account_id, 
             'journal_voucher_description' => $this->faker->sentence,
             'journal_voucher_amount' => $this->faker->randomFloat(2, 0, 1000),
             'account_id_status' => $this->faker->boolean,
@@ -28,7 +29,7 @@ class AcctJournalVoucherItemFactory extends Factory
             'reverse_state' => $this->faker->boolean,
             'created_id' => $this->faker->randomNumber(),
             'updated_id' => $this->faker->randomNumber(),
-            'deleted_id' => null, // Adjust as needed
+            'deleted_id' => null, 
         ];
         
         // return [

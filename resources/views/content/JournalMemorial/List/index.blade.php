@@ -90,7 +90,7 @@
                                 </tr>
                             @else
                                 @php
-                                    $id = 0;
+                                    $id  = 0;
                                 @endphp
                                 @foreach ($acctmemorialjournal as $val)
                                     @php
@@ -98,6 +98,8 @@
                                     @endphp
                                     @foreach ($val->items as $row)
                                         @php
+                                            $nominal = 0; 
+                                            $status = ''; 
                                             if ($row['journal_voucher_debit_amount'] != 0) {
                                                 $nominal = $row['journal_voucher_debit_amount'];
                                                 $status = 'D';
@@ -105,6 +107,13 @@
                                                 $nominal = $row['journal_voucher_credit_amount'];
                                                 $status = 'K';
                                             }
+                                            // if ($row['journal_voucher_debit_amount'] != 0) {
+                                            //     $nominal = $row['journal_voucher_debit_amount'];
+                                            //     $status = 'D';
+                                            // } elseif ($row['journal_voucher_credit_amount'] != 0) {
+                                            //     $nominal = $row['journal_voucher_credit_amount'];
+                                            //     $status = 'K';
+                                            // }
                                         @endphp
                                         @if ($i == 1)
                                             <tr>

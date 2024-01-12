@@ -14,7 +14,7 @@ class AcctJournalVoucherItemSeeder extends Seeder
      */
     public function run(): void
     {
-        AcctJournalVoucherItem::factory()->count(3)
+        AcctJournalVoucherItem::factory()->count(1)
         ->has(AcctJournalVoucher::factory()->count(1),'journal')
         ->create();
     }

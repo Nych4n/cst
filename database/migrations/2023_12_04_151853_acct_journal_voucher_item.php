@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->foreign('journal_voucher_id')->references('journal_voucher_id')->on('acct_journal_voucher')->onUpdate('cascade')->onDelete('set null');
                 $table->unsignedBigInteger('account_id')->nullable();
                 $table->foreign('account_id')->references('account_id')->on('acct_account')->onUpdate('cascade')->onDelete('set null');
-                $table->string('journal_voucher_description')->nullable();
+                $table->text('journal_voucher_description')->nullable();
                 $table->decimal('journal_voucher_amount',20)->nullable()->default(0);
                 $table->boolean('account_id_status')->nullable()->default(0);
                 $table->boolean('account_id_default_status')->nullable()->default(0);

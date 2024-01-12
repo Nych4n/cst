@@ -18,9 +18,7 @@ class AcctJournalVoucherSeeder extends Seeder
     {
         //
         AcctJournalVoucher::factory()->count(1)
-        ->has(AcctJournalVoucherItem::factory()->count(3),'items')
+        ->has(AcctJournalVoucherItem::factory()->count(1),'items')
         ->create();
-        // DB::unprepared(file_get_contents(database_path('migrations/create_trigger_acct_journal_voucher_item.sql')));
-        // DB::unprepared(file_get_contents(database_path('migrations/create_trigger_acct_journal_voucher.sql')));
     }
 }

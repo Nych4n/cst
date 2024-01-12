@@ -25,7 +25,7 @@ return new class extends Migration
                 $table->string('transaction_journal_no')->nullable();
                 $table->string('journal_voucher_no')->nullable();
                 $table->string('journal_voucher_period')->nullable();
-                $table->date('journal_voucher_date')->nullable();
+                $table->date('journal_voucher_date')->nullable();   
                 $table->string('journal_voucher_title')->nullable();
                 $table->string('journal_voucher_description')->nullable();
                 $table->string('journal_voucher_token')->nullable();

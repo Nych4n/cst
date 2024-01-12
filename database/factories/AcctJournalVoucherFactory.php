@@ -22,7 +22,9 @@ class AcctJournalVoucherFactory extends Factory
     public function definition(): array
     {
         $faker = \Faker\Factory::create();
-
+        $twoYearsAgo = Carbon::now()->subYears(2); 
+        $currentDate = Carbon::now(); 
+        $randomDate = $faker->dateTimeBetween($twoYearsAgo, $currentDate)->format('Y-m-d');
         return [
             'branch_id' => $this->faker->randomNumber(3),
             'client_id' => null, 
@@ -33,7 +35,7 @@ class AcctJournalVoucherFactory extends Factory
             'transaction_journal_no' => null,
             'journal_voucher_no' => $this->faker->word,
             'journal_voucher_period' => $this->faker->randomNumber(5),
-            'journal_voucher_date' => $this->faker->date(),
+            'journal_voucher_date' => $randomDate,
             'journal_voucher_title' => $this->faker->sentence,
             'journal_voucher_description' => $this->faker->paragraph,
             'journal_voucher_token' => null,
