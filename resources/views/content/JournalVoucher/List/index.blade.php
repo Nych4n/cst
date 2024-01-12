@@ -122,19 +122,23 @@
                                                 <td style="text-align:left; background-color:lightgrey">
                                                     {{ $val['journal_voucher_description'] }}</td>
                                                 <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $val['transaction_module_code'] }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
                                                     {{ $row->account->account_code??'' }}</td>
                                                 <td style="text-align:left; background-color:lightgrey">
                                                     {{ $row->account->account_name??'' }}</td>
                                                 <td style="text-align:right; background-color:lightgrey">
                                                     {{ number_format($nominal, 2) }}</td>
-                                                <td style="text-align:right; background-color:lightgrey">
+                                                <td style="text-align:center; background-color:lightgrey">
                                                     {{ $status }}</td>
+                                                <td style="text-align:center; background-color:lightgrey">
+                                                    <a href="{{ route ('journal-voucher.print',$val->journal_voucher_id) }}" class="btn btn-primary">
+                                                        <i class="bi bi-file-earmark-pdf"></i> Cetak
+                                                    </a>
+                                                    
+                                                </td>
                                             </tr>
                                         @else
                                             <tr>
-                                                <td style="text-align:center"></td>
+                                                <td style="text-a lign:center"></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
@@ -174,3 +178,13 @@
         </div>
     </div>
 </x-base-layout>
+<script>
+    // Mendapatkan tanggal hari ini
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Mengatur nilai default ke input tanggal mulai
+    document.getElementById('start_date').value = today;
+    
+    // Mengatur nilai default ke input tanggal akhir
+    document.getElementById('end_date').value = today;
+</script>

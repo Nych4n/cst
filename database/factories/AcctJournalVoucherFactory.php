@@ -3,9 +3,10 @@
 namespace Database\Factories;
 
 
+use Illuminate\Support\Str;
+use Illuminate\Support\Carbon;
 use App\Models\AcctJournalVoucher;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Str;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\AcctJournalVoucher>

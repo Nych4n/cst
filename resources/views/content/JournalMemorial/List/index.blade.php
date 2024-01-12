@@ -18,14 +18,14 @@
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Awal') }}</label>
                             <input type="text" name="start_date" id="start_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                                class="form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('start_date', empty($session['start_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['start_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Akhir') }}</label>
                             <input type="text" name="end_date" id="end_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                                class="form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('end_date', empty($session['end_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['end_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
@@ -174,3 +174,13 @@
         </div>
     </div>
 </x-base-layout>
+<script>
+    // Mendapatkan tanggal hari ini
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Mengatur nilai default ke input tanggal mulai
+    document.getElementById('start_date').value = today;
+    
+    // Mengatur nilai default ke input tanggal akhir
+    document.getElementById('end_date').value = today;
+</script>

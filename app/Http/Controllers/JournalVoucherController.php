@@ -285,17 +285,17 @@ class JournalVoucherController extends Controller
                 <td><div style=\"text-align: center; font-size:14px;font-weight: bold\">JURNAL UMUM</div></td>
             </tr>
                 <tr>
-                <td><div style=\"text-align: center; font-size:10px\">".$acctjournalvoucher['branch_name']."</div></td>
+                <td><div style=\"text-align: center; font-size:12px\">".$acctjournalvoucher['branch_name']."</div></td>
             </tr>
             <tr>
-                <td><div style=\"text-align: center; font-size:10px\">Jam : ".date('H:i:s')."</div></td>
+                <td><div style=\"text-align: center; font-size:12px\">Jam : ".date('H:i:s')."</div></td>
             </tr>
         </table>";
 
         $pdf::writeHTML($tbl, true, false, false, false, '');
         
         $tbl1 = "
-        <table cellspacing=\"0\" cellpadding=\"1\" border=\"0\" width=\"100%\">
+        <table cellspacing=\"10\" cellpadding=\"1\" border=\"0\" width=\"100%\">
             <tr>
                 <td width=\"20%\"><div style=\"text-align: left;\">Tanggal Jurnal</div></td>
                 <td width=\"80%\"><div style=\"text-align: left;\">: ".date('d-m-Y', strtotime($acctjournalvoucher['journal_voucher_date']))."</div></td>
@@ -317,8 +317,8 @@ class JournalVoucherController extends Controller
             <tr>
                 <td width=\"5%\"><div style=\"text-align: center;font-weight: bold\">No.</div></td>
                 <td width=\"40%\"><div style=\"text-align: center;font-weight: bold\">Perkiraan</div></td>
-                <td width=\"20%\"><div style=\"text-align: center;font-weight: bold\">Debet</div></td>
-                <td width=\"20%\"><div style=\"text-align: center;font-weight: bold\">Kredit</div></td>
+                <td width=\"27%\"><div style=\"text-align: center;font-weight: bold\">Debet</div></td>
+                <td width=\"27%\"><div style=\"text-align: center;font-weight: bold\">Kredit</div></td>
             </tr>
         ";
         $no =1;
@@ -330,8 +330,8 @@ class JournalVoucherController extends Controller
                     <tr>
                         <td width=\"5%\"><div style=\"text-align: center;font-size:12px\">".$no."</div></td>
                         <td width=\"40%\"><div style=\"text-align: left;font-size:12px\">(".$val['account_code'].") ".$val['account_name']."</div></td>
-                        <td width=\"20%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_debit_amount'],2)."</div></td>
-                        <td width=\"20%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_credit_amount'],2)."</div></td>
+                        <td width=\"27%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_debit_amount'],2)."</div></td>
+                        <td width=\"27%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_credit_amount'],2)."</div></td>
                     </tr>
             ";
             $total_debet += $val['journal_voucher_debit_amount'];
@@ -342,16 +342,16 @@ class JournalVoucherController extends Controller
             <tr>
                 <td width=\"5%\"><div style=\"text-align: center;font-size:12px\"></div></td>
                 <td width=\"40%\"><div style=\"text-align: left;font-size:12px\"></div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-size:12px\"></div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-size:12px\"></div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-size:12px\"></div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-size:12px\"></div></td>
             </tr>		
         </table>
 
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
                 <td colspan=\"2\" width=\"45%\"></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_debet, 2)."</div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_kredit, 2)."</div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_debet, 2)."</div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_kredit, 2)."</div></td>
             </tr>
         </table>";
 
