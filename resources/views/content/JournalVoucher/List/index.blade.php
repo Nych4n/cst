@@ -133,9 +133,9 @@
                                                     <a href="{{ route ('journal-voucher.print',$val->journal_voucher_id) }}" class="btn btn-primary">
                                                         <i class="bi bi-file-earmark-pdf"></i> Cetak
                                                     </a>         
-                                                    <a href="{{ route('journal-voucher.reset-elements-add') }}" class="btn btn-danger">
+                                                    {{-- <a href="{{ route('journal-voucher.reset-elements-add') }}" class="btn btn-danger">
                                                         <i class="bi bi-file-earmark-pdf"></i> Reset
-                                                    </a>
+                                                    </a> --}}
                                                     
                                                 </td>
                                             </tr>

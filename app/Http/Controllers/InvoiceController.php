@@ -102,17 +102,18 @@ class InvoiceController extends Controller
             return redirect()->route('invoice.index')->with(['pesan' => 'Invoice berhasil dibuat', 'alert' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            // dd($e);
             report($e);
             return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'danger']);
         }
     }
     public function processAdd(Request $request)
     {
+        // dd($request->all());
         $preference = CompanySetting::where('company_id', Auth::user()->company_id)->get();
         $product = CoreProduct::with('type')->find($request->product_id);
-        try {
-            DB::beginTransaction();
+        // try {
+        //     DB::beginTransaction();
             $invoice = AcctInvoice::create([
                 'invoice_date' => Carbon::now()->format('Y-m-d'),
                 'client_id' => $request->client_id,
@@ -178,14 +179,17 @@ class InvoiceController extends Controller
                 $cp->payment_status = 1;
                 $cp->save();
             }
-            DB::commit();
-            return redirect()->route('invoice.index')->with(['pesan' => 'Invoice berhasil dibuat', 'alert' => 'success']);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            // dd($e);
-            report($e);
-            return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'danger']);
-        }
+        //     DB::commit();
+        //     return redirect()->route('invoice.index')->with(['pesan' => 'Invoice berhasil dibuat', 'alert' => 'success']);
+        // } catch (\PDOException $e) {
+        //     report($e);
+        //     return redirect()->route('invoice.index')->with(['pesan' => 'Database error', 'alert' => 'danger']);
+        // }catch (\Exception $e) {
+        //     DB::rollBack();
+        //     // dd($e);
+        //     report($e);
+        //     return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'danger']);
+        // }
     }
     public function print($invoice_id)
     {
