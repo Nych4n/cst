@@ -68,7 +68,7 @@
                                 <div class="col-lg-10 fv-row">
                                     <input type="text" name="contact_person" id="contact_person"
                                         class="form-control form-control-lg form-control-solid" placeholder="Nama CP"
-                                        value="{{ old('contact_person', $data->contact_person??'-') }}"
+                                        value="{{ old('contact_person', $clientData->contact_person??'-') }}"
                                         autocomplete="off" readonly />
                                 </div>
                             </div>
@@ -79,7 +79,7 @@
                                     <input name="phone" id="phone"
                                         class="form-control form-control-solid form-select-lg"
                                         placeholder="Nomor Handphone"
-                                        value="{{ old('phone', $data->phone??'-') }}"
+                                        value="{{ old('phone', $clientData->phone??'-') }}"
                                         readonly />
                                 </div>
                             </div>
@@ -89,7 +89,7 @@
                                     <input name="email" id="email"
                                         class="form-control form-control-solid form-select-lg"
                                         placeholder="Masukan Email"
-                                        value="{{ old('email', $data->email??'-') }}"
+                                        value="{{ old('email', $clientData->email??'-') }}"
                                         readonly />
                                 </div>
                             </div>
@@ -98,7 +98,7 @@
                                     class="col-lg-2 col-form-label fw-bold fs-6 required">{{ __('Alamat') }}</label>
                                 <div class="col-lg-10 fv-row">
                                     <textarea id="address" name="address" class="form-control form-control form-control-solid" data-kt-autosize="true"
-                                        placeholder="Alamat Lengkap" readonly>{{ old('address', $data->address??'-') }}</textarea>
+                                        placeholder="Alamat Lengkap" readonly>{{ old('address', $clientData->address??'-') }}</textarea>
                                 </div>
                             </div>
                     </div>
@@ -112,20 +112,26 @@
                                     <th>Jabatan/PIC</th>
                                     <th>No Handphone</th>
                                 </thead>
-                                @php
-                                    $no = 1;
-                                @endphp
+                                @if ($clientData && isset($clientData->member) && count($clientData->member) > 0)
+                                @php $no = 1; @endphp
                                 <tbody class="table-group-divider" id="table-member-content">
-                                    @foreach ($data->member as $key => $val)
-                                        <tr class="client-member" id="cm-{{ $key }}"
-                                            data-id="{{ $key }}">
+                                    @foreach ($clientData->member as $key => $val)
+                                        <tr class="client-member" id="cm-{{ $key }}" data-id="{{ $key }}">
                                             <td>{{ $no++ }}</td>
-                                            <td>{{ $val['name'] }}</td>
-                                            <td>{{ $val['position']??'-' }}</td>
-                                            <td>{{ $val['phone']??'-' }}</td>
+                                            <td>{{ $val->name }}</td>
+                                            <td>{{ $val->position }}</td>
+                                            <td>{{ $val->phone }}</td>
                                         </tr>
                                     @endforeach
                                 </tbody>
+                            @else
+                                <tbody>
+                                    <tr>
+                                        <td colspan="4">No member data available</td>
+                                    </tr>
+                                </tbody>
+                            @endif
+                            
                                 <tfoot>
                                 </tfoot>
                             </table>

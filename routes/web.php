@@ -997,7 +997,7 @@ Route::middleware('auth')->group(function () {
     Route::prefix('acct-account-setting')->controller(AcctAccountSettingController::class)->name('account-setting.')->group(function () {
         Route::get('/','index')->name('index');
         Route::post('/process-add','processAddAcctAccountSetting')->name('process-add');
-    });
+    }); 
     Route::prefix('preference-company')->controller(PreferenceCompanyController::class)->name('preference-company.')->group(function () {
         Route::get('/','index')->name('index');
         Route::post('/process-add','processAdd')->name('process-add');

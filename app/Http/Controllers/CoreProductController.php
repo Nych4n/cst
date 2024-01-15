@@ -218,4 +218,17 @@ class CoreProductController extends Controller
             return response()->json(['status' => 0, 'msg' => $e]);
         }
     }
+    public function detail($id)
+    {
+        $data = CoreProduct::with(['client', 'invoice', 'addons'])->find($id);
+
+        if (!$data) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+        }
+        $clientData = $data->client;
+        // dd($clientData);
+        return view('content.CoreProduct.Detail.index', compact('data', 'clientData'));
+    }
+
+
 }
