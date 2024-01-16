@@ -27,7 +27,7 @@ class AcctJournalVoucherFactory extends Factory
         $currentDate = Carbon::now(); 
         $randomDate = $faker->dateTimeBetween($twoYearsAgo, $currentDate)->format('Y-m-d');
         return [
-            'branch_id' => $this->faker->randomNumber(3),
+            'branch_id' => $this->faker->randomElement([0, 1]),
             'client_id' => null, 
             'transaction_module_id' => $this->faker->randomElement([1, 2]), 
             'journal_voucher_status' => $this->faker->randomElement([0, 1]),

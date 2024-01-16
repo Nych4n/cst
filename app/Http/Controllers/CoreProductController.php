@@ -104,7 +104,7 @@ class CoreProductController extends Controller
             return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil dimasukan', 'alert' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            // dd($e);
             report($e);
             return redirect()->route('product.index')->with(['pesan' => 'Produk gagal dimasukan', 'alert' => 'danger']);
         }
@@ -157,7 +157,7 @@ class CoreProductController extends Controller
         return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil diedit', 'alert' => 'success']);
         } catch (\Exception $e) {
         DB::rollBack();
-        dd($e);
+        // dd($e);
         report($e);
         return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil diedit', 'alert' => 'danger']);
         }

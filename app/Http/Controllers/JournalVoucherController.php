@@ -285,7 +285,7 @@ class JournalVoucherController extends Controller
                 <td><div style=\"text-align: center; font-size:14px;font-weight: bold\">JURNAL UMUM</div></td>
             </tr>
                 <tr>
-                <td><div style=\"text-align: center; font-size:12px\">".$acctjournalvoucher['branch_name']."</div></td>
+                <td><div style=\"text-align: center; font-size:12px\">".$acctjournalvoucher['branch_name'??'']."</div></td>
             </tr>
             <tr>
                 <td><div style=\"text-align: center; font-size:12px\">Jam : ".date('H:i:s')."</div></td>
