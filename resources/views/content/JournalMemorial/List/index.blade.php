@@ -174,13 +174,4 @@
         </div>
     </div>
 </x-base-layout>
-<script>
-    // Mendapatkan tanggal hari ini
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Mengatur nilai default ke input tanggal mulai
-    document.getElementById('start_date').value = today;
-    
-    // Mengatur nilai default ke input tanggal akhir
-    document.getElementById('end_date').value = today;
-</script>
+ 

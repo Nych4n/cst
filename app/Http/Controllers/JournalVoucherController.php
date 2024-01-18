@@ -58,16 +58,11 @@ class JournalVoucherController extends Controller
         } else {
             $end_date = date('Y-m-d', strtotime($session['end_date']));
         }
-        $branch_id          = auth()->user()->branch_id;
-        if($branch_id == 0){
-            $corebranch         = CoreBranch::get();
-        }else{
-            $corebranch         = CoreBranch::where('branch_id', $branch_id)
-            ->get();
-        }
-        $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',0)
-        ->where('journal_voucher_date','>=', $session['start_date']??Carbon::now()->format('Y-m-d'))
-        ->where('journal_voucher_date','<=', $session['end_date']??Carbon::now()->format('Y-m-d'));
+        $corebranch = CoreBranch::select('branch_id', 'branch_name')
+        ->get();
+        $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',1)
+        ->where('journal_voucher_date','>=', Carbon::parse($session['start_date']??now())->format('Y-m-d')??Carbon::now()->format('Y-m-d'))
+        ->where('journal_voucher_date','<=', Carbon::parse($session['end_date']??now())->format('Y-m-d')??Carbon::now()->format('Y-m-d'));
         if(!empty($session['branch_id'])) {
             $acctjournalvoucher = $acctjournalvoucher->where('branch_id', $session['branch_id']);
         }

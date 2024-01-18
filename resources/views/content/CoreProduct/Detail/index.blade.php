@@ -112,17 +112,15 @@
                                     <th>Jabatan/PIC</th>
                                     <th>No Handphone</th>
                                 </thead>
-                                @if ($clientData && isset($clientData->member) && count($clientData->member) > 0)
+                                @if ($clientData)
                                 @php $no = 1; @endphp
                                 <tbody class="table-group-divider" id="table-member-content">
-                                    @foreach ($clientData->member as $key => $val)
-                                        <tr class="client-member" id="cm-{{ $key }}" data-id="{{ $key }}">
-                                            <td>{{ $no++ }}</td>
-                                            <td>{{ $val->name }}</td>
-                                            <td>{{ $val->position }}</td>
-                                            <td>{{ $val->phone }}</td>
-                                        </tr>
-                                    @endforeach
+                                    <tr class="client-member" id="cm-{{ $clientData->id }}" data-id="{{ $clientData->id }}">
+                                        <td>{{ $no++ }}</td>
+                                        <td>{{ $clientData->name }}</td>
+                                        <td>{{ $clientData->position }}</td>
+                                        <td>{{ $clientData->phone }}</td>
+                                    </tr>
                                 </tbody>
                             @else
                                 <tbody>
