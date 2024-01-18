@@ -492,6 +492,8 @@ Route::middleware('auth')->group(function () {
     //CoreBranch pages
     Route::prefix('branch')->name('branch.')->group(function () {
         Route::get('/', [CoreBranchController::class, 'index'])->name('index');
+        Route::get('/add', [CoreBranchController::class, 'add'])->name('add');
+        Route::post('/process-add', [CoreBranchController::class, 'processAdd'])->name('process-add');
         Route::get('/edit/{branch_id}', [CoreBranchController::class, 'edit'])->name('edit');
         Route::put('/process-edit', [CoreBranchController::class, 'processEdit'])->name('process-edit');
         Route::get('/delete/{branch_id}', [CoreBranchController::class, 'delete'])->name('delete');

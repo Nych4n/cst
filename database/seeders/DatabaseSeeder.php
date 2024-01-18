@@ -23,6 +23,7 @@ class DatabaseSeeder extends Seeder
             AssetSeeder::class,
             AcctBankSeeder::class,
             CoreOfficeSeeder::class,
+            CoreBranchSeeder::class,
         ]);
     }
 }

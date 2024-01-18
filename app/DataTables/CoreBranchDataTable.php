@@ -34,8 +34,8 @@ class CoreBranchDataTable extends DataTable
     public function query(CoreBranch $model)
     {
         return $model->newQuery()
-        ->select('branch_id', 'branch_code', 'branch_name', 'branch_city', 'branch_address', 'branch_manager','branch_contact_person', 'branch_email', 'branch_phone1')
-        ->where('data_state', 0);
+        ->select('branch_id', 'branch_code', 'branch_name', 'branch_city', 'branch_address', 'branch_manager','branch_contact_person', 'branch_email', 'branch_phone1');
+    
     }
 
     /**
@@ -88,7 +88,7 @@ class CoreBranchDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename(): string
     {
         return 'CoreBranch_' . date('YmdHis');
     }

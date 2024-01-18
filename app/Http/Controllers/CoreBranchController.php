@@ -14,14 +14,60 @@ class CoreBranchController extends Controller
         return $dataTable->render('content.CoreBranch.List.index');
     }
 
+    public function add()
+    {
+        $branch_data = CoreBranch::select('branch_id', 'branch_code','branch_name','branch_city','branch_address','branch_manager','branch_contact_person','branch_email','branch_phone1')
+        ->get();
+
+        return view('content.CoreBranch.add.index', compact('branch_data'));
+    }
+
+    public function processAdd(Request $request)
+    {
+        $fields = $request->validate([
+            'branch_code'                   => ['required'],
+            'branch_name'                   => ['required'],
+            'branch_city'                   => ['required'],
+            'branch_address'                => ['required'],
+            'branch_manager'                => ['required'],
+            'branch_contact_person'         => ['required'],
+            'branch_email'                  => ['required'],
+            'branch_phone1'                 => ['required'],
+        ]);
+
+        $branch = array(
+            'branch_code'                   => $fields['branch_code'],
+            'branch_name'                   => $fields['branch_name'],
+            'branch_city'                   => $fields['branch_city'],
+            'branch_address'                => $fields['branch_address'],
+            'branch_manager'                => $fields['branch_manager'],
+            'branch_contact_person'         => $fields['branch_contact_person'],
+            'branch_email'                  => $fields['branch_email'],
+            'branch_phone1'                 => $fields['branch_phone1'],
+            'created_id'                    => auth()->user()->user_id,
+        );
+
+        if(CoreBranch::create($branch)){
+            $message = array(
+                'pesan' => 'Kode Cabang berhasil ditambah',
+                'alert' => 'success'
+            );
+        }else{
+            $message = array(
+                'pesan' => 'Kode Cabang gagal ditambah',
+                'alert' => 'error'
+            );
+        }
+
+        return redirect('branch')->with($message);
+    }
+
     public function edit($id)
     {
         $corebranch = CoreBranch::select('branch_id', 'branch_code', 'branch_name', 'branch_address', 'branch_city', 'branch_contact_person', 'branch_email', 'branch_phone1', 'branch_manager', 'account_rak_id','account_aka_id')
         ->where('branch_id', $id)
-        ->where('data_state', 0)
         ->first();
         $acctacount = AcctAccount::select('account_id', 'account_name','account_code')
-        ->where('data_state', 0)
         ->get();
 
         return view('content.CoreBranch.Edit.index', compact('corebranch','acctacount'));
@@ -74,10 +120,9 @@ class CoreBranchController extends Controller
     public function delete($id)
     {
         $corebranch                 = CoreBranch::findOrFail($id);
-        $corebranch->data_state     = 1;
         $corebranch->updated_id     = auth()->user()->user_id;
 
-        if($corebranch->save()){
+        if($corebranch->delete()){
             $message = array(
                 'pesan' => 'Kode Cabang berhasil dihapus',
                 'alert' => 'success'

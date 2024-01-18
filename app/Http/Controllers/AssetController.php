@@ -26,50 +26,50 @@ class AssetController extends Controller
     }
 
     public function processAdd(Request $request)
-{
-    $fields = $request->validate([
-        'name'               => ['required'],
-        'price'              => ['required', 'numeric'],
-        'acquisition_amount' => ['required', 'numeric'],
-        'estimated_age'      => ['required', 'numeric'],
-        'residual_amount'    => ['required', 'numeric'],
-        'remark'             => ['required'],
-    ]);
-
-    try {
-        $add_asset = [
-            'name'               => $fields['name'],
-            'price'              => $fields['price'],
-            'acquisition_amount' => $fields['acquisition_amount'],
-            'estimated_age'      => $fields['estimated_age'],
-            'residual_amount'    => $fields['residual_amount'],
-            'remark'             => $fields['remark'],
-            'created_id'         => auth()->user()->user_id
-        ];
-
-        AssetMenu::create($add_asset);
-
-        return redirect()->route('as-report.index')->with([
-            'pesan' => 'Data asset berhasil ditambah',
-            'alert' => 'success'
+    {
+        $fields = $request->validate([
+            'name'               => ['required'],
+            'price'              => ['required', 'numeric'],
+            'acquisition_amount' => ['required', 'numeric'],
+            'estimated_age'      => ['required', 'numeric'],
+            'residual_amount'    => ['required', 'numeric'],
+            'remark'             => ['required'],
         ]);
-    } catch (\Exception $e) {
-        return redirect()->back()->withInput()->with([
-            'pesan' => 'Gagal menambahkan data asset: ' . $e->getMessage(),
-            'alert' => 'error'
-        ]);
+
+        try {
+            $add_asset = [
+                'name'               => $fields['name'],
+                'price'              => $fields['price'],
+                'acquisition_amount' => $fields['acquisition_amount'],
+                'estimated_age'      => $fields['estimated_age'],
+                'residual_amount'    => $fields['residual_amount'],
+                'remark'             => $fields['remark'],
+                'created_id'         => auth()->user()->user_id
+            ];
+
+            AssetMenu::create($add_asset);
+
+            return redirect()->route('as-report.index')->with([
+                'pesan' => 'Data asset berhasil ditambah',
+                'alert' => 'success'
+            ]);
+        } catch (\Exception $e) {
+            return redirect()->back()->withInput()->with([
+                'pesan' => 'Gagal menambahkan data asset: ' . $e->getMessage(),
+                'alert' => 'error'
+            ]);
+        }
     }
-}
-public function edit($id)
-{
-    $add_asset = AssetMenu::select('asset_id', 'name','buy_date','price','acquisition_amount','estimated_age','residual_amount','remark')
-    ->where('asset_id', $id)
-    ->first();
-    $asset_add = AssetMenu::select('asset_id')
-    ->get();
+    public function edit($id)
+    {
+        $add_asset = AssetMenu::select('asset_id', 'name','buy_date','price','acquisition_amount','estimated_age','residual_amount','remark')
+        ->where('asset_id', $id)
+        ->first();
+        $asset_add = AssetMenu::select('asset_id')
+        ->get();
 
-    return view('content.PreferenceAsset.Edit.index', compact('add_asset','asset_add'));
-}
+        return view('content.PreferenceAsset.Edit.index', compact('add_asset','asset_add'));
+    }
 
     public function processEdit(Request $request)
     {

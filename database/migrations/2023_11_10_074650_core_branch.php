@@ -32,7 +32,10 @@ return new class extends Migration
                 $table->integer('branch_has_child')->nullable()->default(0);
                 $table->integer('branch_top_parent_id')->nullable()->default(0);
                 $table->integer('branch_parent_id')->nullable()->default(0);
-                $table->boolean('branch_status')->nullable()->default(0);
+                $table->boolean('branch_status')->nullable()->default(0);                
+                $table->unsignedBigInteger('created_id')->nullable();
+                $table->unsignedBigInteger('updated_id')->nullable();
+                $table->unsignedBigInteger('deleted_id')->nullable();
                 $table->timestamps();
                 $table->softDeletesTz();
             });
