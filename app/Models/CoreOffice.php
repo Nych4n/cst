@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Models;
-
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Database\Factories\CoreOfficeFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class CoreOffice extends Model
 {
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var string[]
-     */
+    use SoftDeletes, HasFactory;       
+        /**
+         * The attributes that are mass assignable.
+         *
+         * @var string[]
+         */
 
     protected $table        = 'core_office'; 
     protected $primaryKey   = 'office_id';

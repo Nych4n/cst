@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\DataTables\CoreOfficeDataTable;
-use App\Models\CoreBranch;
 use App\Models\User;
+use App\Models\CoreBranch;
 use App\Models\CoreOffice;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use App\DataTables\CoreOfficeDataTable;
 
 class CoreOfficeController extends Controller
 {
@@ -18,10 +19,10 @@ class CoreOfficeController extends Controller
     public function add()
     {
         $corebranch = CoreBranch::select('branch_id', 'branch_name')
-        ->where('data_state',0)
+        // ->where('data_state',0)
         ->get();
         $user = User::select('user_id','username')
-        ->where('data_state',0)
+        // ->where('data_state',0)
         ->get();
 
         return view('content.CoreOffice.Add.index',compact('corebranch','user'));
@@ -62,13 +63,13 @@ class CoreOfficeController extends Controller
     public function edit($id)
     {
         $corebranch = CoreBranch::select('branch_id', 'branch_name')
-        ->where('data_state',0)
+        // ->where('data_state',0)
         ->get();
         $user = User::select('user_id','username')
-        ->where('data_state',0)
+        // ->where('data_state',0)
         ->get();
         $office = CoreOffice::select('office_id','office_code','office_name','branch_id','user_id')
-        ->where('data_state', 0)
+        // ->where('data_state', 0)
         ->where('office_id', $id)
         ->first();
 
@@ -110,10 +111,10 @@ class CoreOfficeController extends Controller
     public function delete($id)
     {
         $office                 = CoreOffice::findOrFail($id);
-        $office->data_state     = 1;
-        $office->updated_id     = auth()->user()->user_id;
-
-        if($office->save()){
+        DB::transaction(function () use ($office) {
+            $office->delete();
+        });
+         if($office->save()){
             $message = array(
                 'pesan' => 'Kode Business Office (BO) berhasil dihapus',
                 'alert' => 'success'

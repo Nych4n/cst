@@ -35,8 +35,8 @@ class CoreOfficeDataTable extends DataTable
     {
         return $model->newQuery()
         ->join('core_branch','core_branch.branch_id','=','core_office.branch_id')
-        ->select('core_office.office_id', 'core_office.office_code', 'core_office.office_name', 'core_branch.branch_name')
-        ->where('core_office.data_state',0);
+        ->select('core_office.office_id', 'core_office.office_code', 'core_office.office_name', 'core_branch.branch_name');
+        // ->where('core_office.data_state',0);
     }
 
     /**
@@ -84,7 +84,7 @@ class CoreOfficeDataTable extends DataTable
      *
      * @return string
      */
-    protected function filename()
+    protected function filename() : string
     {
         return 'CoreOffice_' . date('YmdHis');
     }
