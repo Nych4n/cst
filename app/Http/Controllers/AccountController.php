@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\DataTables\AccountDataTable;
-use App\Helpers\Configuration;
 use App\Models\AcctAccount;
+use Illuminate\Http\Request;
+use App\Helpers\Configuration;
+use Illuminate\Support\Facades\DB;
+use App\DataTables\AccountDataTable;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 
 class AccountController extends Controller
@@ -87,22 +89,18 @@ class AccountController extends Controller
 
     public function delete($account_id)
     {
-        $table                  = AcctAccount::findOrFail($account_id);
-        $table->data_state      = 1;
-        $table->updated_id      = auth()->user()->user_id;
+        $account = AcctAccount::findOrFail($account_id);
 
-        if ($table->save()) {
-            $message = array(
-                'pesan' => 'Perkiraan berhasil dihapus',
-                'alert' => 'success'
-            );
-        } else {
-            $message = array(
-                'pesan' => 'Perkiraan gagal dihapus',
-                'alert' => 'error'
-            );
-        }
-
+        // Soft delete by using Laravel's softDeletes method
+        DB::transaction(function () use ($account) {
+            $account->delete();
+        });
+    
+        $message = [
+            'pesan' => 'Perkiraan berhasil dihapus',
+            'alert' => 'success'
+        ];
+    
         return redirect('account')->with($message);
     }
 
