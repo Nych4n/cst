@@ -5,7 +5,7 @@
             <div class="card-toolbar">
                 <a type="button" href="{{ route('branch.add') }}"  class="btn btn-sm btn-light-primary">
                     {!! theme()->getSvgIcon("icons/duotune/general/gen035.svg", "svg-icon-2x me-1") !!}
-                    {{ __('Tambah User Baru') }}
+                    {{ __('Tambah Cabang Baru') }}
                 </a>
             </div>
         </div>

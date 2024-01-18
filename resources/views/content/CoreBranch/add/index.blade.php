@@ -7,31 +7,66 @@ var validator = FormValidation.formValidation(
     form,
     {
         fields: {
-            'office_code': {
+            'branch_code': {
                 validators: {
                     notEmpty: {
-                        message: 'Kode BO harus diisi'
+                        message: 'Kode Cabang harus diisi'
                     }
                 }
             },
-            'office_name': {
+            'branch_name': {
                 validators: {
                     notEmpty: {
-                        message: 'Nama BO harus diisi'
+                        message: 'Nama Cabang harus diisi'
                     }
                 }
             },
-            'branch_id': {
+            'branch_city': {
                 validators: {
                     notEmpty: {
-                        message: 'Cabang BO harus diisi'
+                        message: 'Kota harus diisi'
                     }
                 }
             },
-            'user_id': {
+            'branch_contact_person': {
                 validators: {
                     notEmpty: {
-                        message: 'Akun BO harus diisi'
+                        message: 'Orang yang dapat dihubungi harus diisi'
+                    }
+                }
+            },
+            'branch_email': {
+                validators: {
+                    notEmpty: {
+                        message: 'Email harus diisi'
+                    }
+                }
+            },
+            'branch_phone1': {
+                validators: {
+                    notEmpty: {
+                        message: 'No. Telp harus diisi'
+                    }
+                }
+            },
+            'branch_manager': {
+                validators: {
+                    notEmpty: {
+                        message: 'Kepala Cabang harus diisi'
+                    }
+                }
+            },
+            'account_rak_id': {
+                validators: {
+                    notEmpty: {
+                        message: 'Rak Cabang harus diisi'
+                    }
+                }
+            },
+            'account_aka_id': {
+                validators: {
+                    notEmpty: {
+                        message: 'Aka Cabang harus diisi'
                     }
                 }
             },
@@ -75,7 +110,7 @@ submitButton.addEventListener('click', function (e) {
     <div class="card mb-5 mb-xl-10">
         <div class="card-header border-0">
             <div class="card-title m-0">
-                <h3 class="fw-bolder m-0">{{ __('Form Tambah User Baru') }}</h3>
+                <h3 class="fw-bolder m-0">{{ __('Form Tambah Cabang Baru') }}</h3>
             </div>
 
             <a href="{{ route('branch.index') }}" class="btn btn-light align-self-center">
@@ -134,6 +169,28 @@ submitButton.addEventListener('click', function (e) {
                         <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('No. Telp') }}</label>
                         <div class="col-lg-8 fv-row">
                         <input type="text" name="branch_phone1" class="form-control form-control-lg form-control-solid" placeholder="NO. Telp" value="{{ old('branch_phone1', '' ?? '') }}" autocomplete="off"/>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('Rak Cabang') }}</label>
+                        <div class="col-lg-8 fv-row">
+                            <select name="account_rak_id" id="account_rak_id" aria-label="{{ __('Pilih') }}" data-control="select2" data-placeholder="{{ __('Pilih Rak Cabang') }}" data-allow-clear="true" class="form-select form-select-solid form-select-lg">
+                                <option value="">{{ __('Pilih') }}</option>
+                                @foreach($acctacount as $key => $value)
+                                    <option data-kt-flag="{{ $value->account_id }}" value="{{ $value->account_id }}" {{ $value->account_id === old('account_id', $corebranch->account_rak_id ?? '') ? 'selected' :'' }}>{{ $value['account_code'] }} - {{ $value['account_name'] }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row mb-6">
+                        <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('Aka Cabang') }}</label>
+                        <div class="col-lg-8 fv-row">
+                            <select name="account_aka_id" id="account_aka_id" aria-label="{{ __('Pilih') }}" data-control="select2" data-placeholder="{{ __('Pilih Aka Cabang') }}" data-allow-clear="true" class="form-select form-select-solid form-select-lg">
+                                <option value="">{{ __('Pilih') }}</option>
+                                @foreach($acctacount as $key => $value)
+                                    <option data-kt-flag="{{ $value->account_id }}" value="{{ $value->account_id }}" {{ $value->account_id === old('account_id', $corebranch->account_aka_id ?? '') ? 'selected' :'' }}>{{ $value['account_code'] }} - {{ $value['account_name'] }}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                 </div>

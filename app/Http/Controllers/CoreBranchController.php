@@ -16,10 +16,11 @@ class CoreBranchController extends Controller
 
     public function add()
     {
-        $branch_data = CoreBranch::select('branch_id', 'branch_code','branch_name','branch_city','branch_address','branch_manager','branch_contact_person','branch_email','branch_phone1')
+        $branch_data = CoreBranch::select('branch_id', 'branch_code', 'branch_name', 'branch_address', 'branch_city', 'branch_contact_person', 'branch_email', 'branch_phone1', 'branch_manager', 'account_rak_id','account_aka_id')
         ->get();
-
-        return view('content.CoreBranch.add.index', compact('branch_data'));
+        $acctacount = AcctAccount::select('account_id', 'account_name','account_code')
+        ->get();
+        return view('content.CoreBranch.add.index', compact('branch_data','acctacount'));
     }
 
     public function processAdd(Request $request)
@@ -33,6 +34,8 @@ class CoreBranchController extends Controller
             'branch_contact_person'         => ['required'],
             'branch_email'                  => ['required'],
             'branch_phone1'                 => ['required'],
+            'account_rak_id'                => ['required'],
+            'account_aka_id'                => ['required'],
         ]);
 
         $branch = array(
@@ -44,8 +47,11 @@ class CoreBranchController extends Controller
             'branch_contact_person'         => $fields['branch_contact_person'],
             'branch_email'                  => $fields['branch_email'],
             'branch_phone1'                 => $fields['branch_phone1'],
+            'account_rak_id'                => $fields['account_rak_id'],
+            'account_aka_id'                => $fields['account_aka_id'],
             'created_id'                    => auth()->user()->user_id,
         );
+
 
         if(CoreBranch::create($branch)){
             $message = array(
