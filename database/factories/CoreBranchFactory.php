@@ -25,7 +25,7 @@ class CoreBranchFactory extends Factory
         return [
             'branch_code' => $faker->unique()->regexify('[A-Za-z0-9]{6}'),
             'branch_name' => $faker->company,
-            'branch_manager' => $faker->text(5),
+            'branch_manager' => $faker->name,
             'branch_address' => $faker->address,
             'branch_city' => $faker->city,
             'branch_contact_person' => $faker->name,
