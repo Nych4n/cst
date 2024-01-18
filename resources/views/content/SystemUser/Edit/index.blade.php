@@ -133,10 +133,13 @@ submitButton.addEventListener('click', function (e) {
                         <div class="col-lg-8 fv-row">
                             <select name="user_group_id" id="user_group_id" aria-label="{{ __('Pilih User Group') }}" data-control="select2" data-placeholder="{{ __('Pilih user group..') }}" data-allow-clear="true" class="form-select form-select-solid form-select-lg">
                                 <option value="">{{ __('Pilih user group..') }}</option>
-                                @foreach($usergroup as $key => $value)
-                                    <option data-kt-flag="{{ $value->user_group_id }}" value="{{ $value->user_group_id }}" {{ $value->user_group_id === old('user_group_id', $user->user_group_id ?? '') ? 'selected' :'' }}>{{ $value['user_group_name'] }}</option>
+                                @foreach($usergroup as $value)
+                                    <option data-kt-flag="{{ $value->user_group_id }}" value="{{ $value->user_group_id }}" {{ $value->user_group_id === old('user_group_id', $user->user_group_id ?? '') ? 'selected' : '' }}>
+                                        {{ $value->user_group_name }} <!-- Menggunakan panah untuk mengakses properti -->
+                                    </option>
                                 @endforeach
                             </select>
+                            
                         </div>
                     </div>
                     <div class="row mb-6">

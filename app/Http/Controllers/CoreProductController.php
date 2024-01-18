@@ -104,7 +104,7 @@ class CoreProductController extends Controller
             return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil dimasukan', 'alert' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            // dd($e);
             report($e);
             return redirect()->route('product.index')->with(['pesan' => 'Produk gagal dimasukan', 'alert' => 'danger']);
         }
@@ -157,7 +157,7 @@ class CoreProductController extends Controller
         return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil diedit', 'alert' => 'success']);
         } catch (\Exception $e) {
         DB::rollBack();
-        dd($e);
+        // dd($e);
         report($e);
         return redirect()->route('product.index')->with(['pesan' => 'Produk berhasil diedit', 'alert' => 'danger']);
         }
@@ -218,4 +218,17 @@ class CoreProductController extends Controller
             return response()->json(['status' => 0, 'msg' => $e]);
         }
     }
+    public function detail($id)
+    {
+        $data = CoreProduct::with(['client', 'invoice', 'addons'])->find($id);
+
+        if (!$data) {
+            return redirect()->back()->with('error', 'Data tidak ditemukan.');
+        }
+        $clientData = $data->client;
+        // dd($clientData);
+        return view('content.CoreProduct.Detail.index', compact('data', 'clientData'));
+    }
+
+
 }

@@ -16,10 +16,37 @@ use App\Models\PreferenceTransactionModule;
 
 class JournalVoucherController extends Controller
 {
+    // public function index()
+    // {
+    //     session()->forget('data_journalvoucher');
+    //     session()->forget('array_journalvoucher');
+    //     $session = session()->get('filter_journalvoucher');
+    //     if (empty($session['start_date'])) {
+    //         $start_date = date('Y-m-d');
+    //     } else {
+    //         $start_date = date('Y-m-d', strtotime($session['start_date']));
+    //     }
+    //     if (empty($session['end_date'])) {
+    //         $end_date = date('Y-m-d');
+    //     } else {
+    //         $end_date = date('Y-m-d', strtotime($session['end_date']));
+    //     }
+    //     $corebranch = CoreBranch::select('branch_id', 'branch_name')
+    //     ->get();
+    //     $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',1);
+    //     // ->where('journal_voucher_date','>=', $session['start_date']??Carbon::now()->format('Y-m-d'))
+    //     // ->where('journal_voucher_date','<=', $session['end_date']??Carbon::now()->format('Y-m-d'));
+    //     // if(!empty($session['branch_id'])) {
+    //     //     $acctjournalvoucher = $acctjournalvoucher->where('branch_id', $session['branch_id']);
+    //     // }
+    //     $acctjournalvoucher = $acctjournalvoucher->orderByDesc('created_at')->get();
+
+    //     return view('content.JournalVoucher.List.index',compact('session','corebranch','acctjournalvoucher'));
     public function index()
     {
         session()->forget('data_journalvoucher');
         session()->forget('array_journalvoucher');
+        // Session::forget('journal-token');
         $session = session()->get('filter_journalvoucher');
         if (empty($session['start_date'])) {
             $start_date = date('Y-m-d');
@@ -34,13 +61,14 @@ class JournalVoucherController extends Controller
         $corebranch = CoreBranch::select('branch_id', 'branch_name')
         ->get();
         $acctjournalvoucher = AcctJournalVoucher::with('items.account')->where('journal_voucher_status',1)
-        ->where('journal_voucher_date','>=', Carbon::parse($session['start_date'])->format('Y-m-d')??Carbon::now()->format('Y-m-d'))
-        ->where('journal_voucher_date','<=', Carbon::parse($session['end_date'])->format('Y-m-d')??Carbon::now()->format('Y-m-d'));
+        ->where('journal_voucher_date','>=', Carbon::parse($session['start_date']??now())->format('Y-m-d')??Carbon::now()->format('Y-m-d'))
+        ->where('journal_voucher_date','<=', Carbon::parse($session['end_date']??now())->format('Y-m-d')??Carbon::now()->format('Y-m-d'));
         if(!empty($session['branch_id'])) {
             $acctjournalvoucher = $acctjournalvoucher->where('branch_id', $session['branch_id']);
         }
-        $acctjournalvoucher = $acctjournalvoucher->orderByDesc('created_at')->get();
+        $acctjournalvoucher = $acctjournalvoucher->get();
 
+        // dd($acctjournalvoucher);    
         return view('content.JournalVoucher.List.index',compact('session','corebranch','acctjournalvoucher'));
     }
 
@@ -48,7 +76,6 @@ class JournalVoucherController extends Controller
     {
         $accountstatus = Configuration::AccountStatus();
         $acctaccount = AcctAccount::select('account_id','account_code','account_name')
-        ->where('data_state',0)
         ->get();
         $session = session()->get('data_journalvoucher');
         $arrayses = session()->get('array_journalvoucher');
@@ -75,9 +102,9 @@ class JournalVoucherController extends Controller
             'created_id'					=> auth()->user()->user_id,
         );
 
-        DB::beginTransaction();
+        // DB::beginTransaction();
 
-        try {
+        // try {
 
             AcctJournalVoucher::create($data);
 
@@ -95,6 +122,7 @@ class JournalVoucherController extends Controller
                 if($val['journal_voucher_status'] == 0){
                     $data_debet =array(
                         'journal_voucher_id'			=> $journal_voucher_id,
+                        'branch_id'					    => $data['branch_id'],
                         'account_id'					=> $val['account_id'],
                         'journal_voucher_description'	=> $data['journal_voucher_description'],
                         'journal_voucher_amount'		=> $val['journal_voucher_amount'],
@@ -107,11 +135,11 @@ class JournalVoucherController extends Controller
                 } else {
                     $data_credit =array(
                         'journal_voucher_id'			=> $journal_voucher_id,
+                        'branch_id'					    => $data['branch_id'],
                         'account_id'					=> $val['account_id'],
                         'journal_voucher_description'	=> $data['journal_voucher_description'],
                         'journal_voucher_amount'		=> $val['journal_voucher_amount'],
                         'journal_voucher_credit_amount'	=> $val['journal_voucher_amount'],
-                        'account_id_status'				=> 1,
                         'account_id_default_status'		=> $account_default_status,
                         'created_id'					=> auth()->user()->user_id,
                     );
@@ -119,20 +147,20 @@ class JournalVoucherController extends Controller
                 }
             }
 
-            DB::commit();
+            // DB::commit();
             $message = array(
                 'pesan' => 'Data Jurnal Umum berhasil ditambah',
                 'alert' => 'success',
             );
             return redirect('journal-voucher')->with($message);
-        } catch (\Exception $e) {
-            DB::rollback();
+        // } catch (\Exception $e) {
+        //     DB::rollback();
             $message = array(
                 'pesan' => 'Data Jurnal Umum gagal ditambah',
                 'alert' => 'error'
             );
             return redirect('journal-voucher')->with($message);
-        }
+        // }
 
     }
 
@@ -252,17 +280,17 @@ class JournalVoucherController extends Controller
                 <td><div style=\"text-align: center; font-size:14px;font-weight: bold\">JURNAL UMUM</div></td>
             </tr>
                 <tr>
-                <td><div style=\"text-align: center; font-size:10px\">".$acctjournalvoucher['branch_name']."</div></td>
+                <td><div style=\"text-align: center; font-size:12px\">".$acctjournalvoucher['branch_name'??'']."</div></td>
             </tr>
             <tr>
-                <td><div style=\"text-align: center; font-size:10px\">Jam : ".date('H:i:s')."</div></td>
+                <td><div style=\"text-align: center; font-size:12px\">Jam : ".date('H:i:s')."</div></td>
             </tr>
         </table>";
 
         $pdf::writeHTML($tbl, true, false, false, false, '');
         
         $tbl1 = "
-        <table cellspacing=\"0\" cellpadding=\"1\" border=\"0\" width=\"100%\">
+        <table cellspacing=\"10\" cellpadding=\"1\" border=\"0\" width=\"100%\">
             <tr>
                 <td width=\"20%\"><div style=\"text-align: left;\">Tanggal Jurnal</div></td>
                 <td width=\"80%\"><div style=\"text-align: left;\">: ".date('d-m-Y', strtotime($acctjournalvoucher['journal_voucher_date']))."</div></td>
@@ -284,8 +312,8 @@ class JournalVoucherController extends Controller
             <tr>
                 <td width=\"5%\"><div style=\"text-align: center;font-weight: bold\">No.</div></td>
                 <td width=\"40%\"><div style=\"text-align: center;font-weight: bold\">Perkiraan</div></td>
-                <td width=\"20%\"><div style=\"text-align: center;font-weight: bold\">Debet</div></td>
-                <td width=\"20%\"><div style=\"text-align: center;font-weight: bold\">Kredit</div></td>
+                <td width=\"27%\"><div style=\"text-align: center;font-weight: bold\">Debet</div></td>
+                <td width=\"27%\"><div style=\"text-align: center;font-weight: bold\">Kredit</div></td>
             </tr>
         ";
         $no =1;
@@ -297,8 +325,8 @@ class JournalVoucherController extends Controller
                     <tr>
                         <td width=\"5%\"><div style=\"text-align: center;font-size:12px\">".$no."</div></td>
                         <td width=\"40%\"><div style=\"text-align: left;font-size:12px\">(".$val['account_code'].") ".$val['account_name']."</div></td>
-                        <td width=\"20%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_debit_amount'],2)."</div></td>
-                        <td width=\"20%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_credit_amount'],2)."</div></td>
+                        <td width=\"27%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_debit_amount'],2)."</div></td>
+                        <td width=\"27%\"><div style=\"text-align: right;font-size:12px\">".number_format($val['journal_voucher_credit_amount'],2)."</div></td>
                     </tr>
             ";
             $total_debet += $val['journal_voucher_debit_amount'];
@@ -309,16 +337,16 @@ class JournalVoucherController extends Controller
             <tr>
                 <td width=\"5%\"><div style=\"text-align: center;font-size:12px\"></div></td>
                 <td width=\"40%\"><div style=\"text-align: left;font-size:12px\"></div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-size:12px\"></div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-size:12px\"></div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-size:12px\"></div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-size:12px\"></div></td>
             </tr>		
         </table>
 
         <table cellspacing=\"0\" cellpadding=\"1\" border=\"1\" width=\"100%\">
             <tr>
                 <td colspan=\"2\" width=\"45%\"></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_debet, 2)."</div></td>
-                <td width=\"20%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_kredit, 2)."</div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_debet, 2)."</div></td>
+                <td width=\"27%\"><div style=\"text-align: right;font-weight:bold\">".number_format($total_kredit, 2)."</div></td>
             </tr>
         </table>";
 

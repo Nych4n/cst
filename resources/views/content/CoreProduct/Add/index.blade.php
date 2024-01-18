@@ -616,3 +616,11 @@
         </div>
     </div>
 </x-base-layout>
+<script>
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('start_date').value = today;
+    document.getElementById('trial_date').value = today;
+    document.getElementById('usage_date').value = today;
+    document.getElementById('maintenance_date').value = today;
+    document.getElementById('addon_date').value = today;
+</script>

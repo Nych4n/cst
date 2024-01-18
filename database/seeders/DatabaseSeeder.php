@@ -18,6 +18,10 @@ class DatabaseSeeder extends Seeder
         // DB::unprepared(file_get_contents('core-alamat-16112023.sql'));
         $this->call([
             ProductSeeder::class,
+            //AcctInvoiceSeeder::class,
+            AcctJournalVoucherSeeder::class,
+            AssetSeeder::class,
+            AcctBankSeeder::class,
             // AcctInvoiceSeeder::class,
         ]);
     }

@@ -18,14 +18,14 @@
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Awal') }}</label>
                             <input type="text" name="start_date" id="start_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                                class="form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('start_date', empty($session['start_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['start_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Akhir') }}</label>
                             <input type="text" name="end_date" id="end_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                                class="form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('end_date', empty($session['end_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['end_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
@@ -90,7 +90,7 @@
                                 </tr>
                             @else
                                 @php
-                                    $id = 0;
+                                    $id  = 0;
                                 @endphp
                                 @foreach ($acctmemorialjournal as $val)
                                     @php
@@ -98,6 +98,8 @@
                                     @endphp
                                     @foreach ($val->items as $row)
                                         @php
+                                            $nominal = 0; 
+                                            $status = ''; 
                                             if ($row['journal_voucher_debit_amount'] != 0) {
                                                 $nominal = $row['journal_voucher_debit_amount'];
                                                 $status = 'D';
@@ -105,6 +107,13 @@
                                                 $nominal = $row['journal_voucher_credit_amount'];
                                                 $status = 'K';
                                             }
+                                            // if ($row['journal_voucher_debit_amount'] != 0) {
+                                            //     $nominal = $row['journal_voucher_debit_amount'];
+                                            //     $status = 'D';
+                                            // } elseif ($row['journal_voucher_credit_amount'] != 0) {
+                                            //     $nominal = $row['journal_voucher_credit_amount'];
+                                            //     $status = 'K';
+                                            // }
                                         @endphp
                                         @if ($i == 1)
                                             <tr>
@@ -165,3 +174,4 @@
         </div>
     </div>
 </x-base-layout>
+ 

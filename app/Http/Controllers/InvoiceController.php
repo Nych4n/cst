@@ -102,13 +102,15 @@ class InvoiceController extends Controller
             return redirect()->route('invoice.index')->with(['pesan' => 'Invoice berhasil dibuat', 'alert' => 'success']);
         } catch (\Exception $e) {
             DB::rollBack();
-            dd($e);
+            // dd($e);
             report($e);
             return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'danger']);
         }
     }
+    
     public function processAdd(Request $request)
     {
+        // dd($request->all());
         $preference = CompanySetting::where('company_id', Auth::user()->company_id)->get();
         $product = CoreProduct::with('type')->find($request->product_id);
         // dd($request->all());
@@ -129,6 +131,7 @@ class InvoiceController extends Controller
             ]);
             $totaltermin = 0;
             $totaladd = 0;
+            if($request->has('addon')) {
             foreach ($request->addon as $key => $val) {
                 if (count($val) == 2) {
                     $addon = CoreProductAddon::find($val['id']);
@@ -143,7 +146,8 @@ class InvoiceController extends Controller
                     $addon->payment_status = 1;
                     $addon->save();
                 }
-            }
+            }}
+            if($request->has('termin')){
             foreach ($request->termin as $key => $value) {
                 if (count($value) == 3) {
                     $invoice->items()->create([
@@ -158,18 +162,19 @@ class InvoiceController extends Controller
                     $termin->payment_status = 1;
                     $termin->save();
                 }
-            }
+            }}
             $invoicenew = $invoice->fresh();
-            // if ($totaltermin) {
-            //     $journalter = JournalHelper::code('SI')->clientId($request->client_id)->trsJournalId($invoicenew->invoice_id)->trsJournalNo($invoicenew->invoice_no)->appendTitle("Termin {$request->name} {$request->client_name}", 1)->make('Invoice', $totaladd);
-            //     $journalter->item($preference->where('name', 'receivables_account')->pluck('account_id')[0], 0);
-            //     $journalter->item($product->type()->pluck('account_id')[0], 1);
-            // }
-            // if ($totaladd) {
-            //     $journaladd = JournalHelper::code('SI')->clientId($request->client_id)->trsJournalId($invoicenew->invoice_id)->trsJournalNo($invoicenew->invoice_no)->appendTitle("Addon {$request->name} {$request->client_name}", 1)->make('Invoice', $totaladd);
-            //     $journaladd->item($preference->where('name', 'receivables_account')->pluck('account_id')[0], 0);
-            //     $journaladd->item($product->type()->pluck('account_id')[0], 1);
-            // }
+            if ($totaltermin) {
+                $journalter = JournalHelper::code('SI')->clientId($request->client_id)->trsJournalId($invoicenew->invoice_id)->trsJournalNo($invoicenew->invoice_no)->appendTitle("Termin {$request->name} {$request->client_name}", 1)->make('Invoice', $totaladd);
+                $journalter->item($preference->where('name', 'receivables_account')->pluck('account_id')[0], 0);
+                $journalter->item($product->type()->pluck('account_id')[0], 1);
+            }
+            
+            if ($totaladd) {
+                $journaladd = JournalHelper::code('SI')->clientId($request->client_id)->trsJournalId($invoicenew->invoice_id)->trsJournalNo($invoicenew->invoice_no)->appendTitle("Addon {$request->name} {$request->client_name}", 1)->make('Invoice', $totaladd);
+                $journaladd->item($preference->where('name', 'receivables_account')->pluck('account_id')[0], 0);
+                $journaladd->item($product->type()->pluck('account_id')[0], 1);
+            }
             $cp = CoreProduct::with(['client', 'termin' => function ($q) {
                 $q->where('payment_status', 0);
             }, 'type', 'addons' => function ($q) {
@@ -181,13 +186,14 @@ class InvoiceController extends Controller
             }
             DB::commit();
             return redirect()->route('invoice.index')->with(['pesan' => 'Invoice berhasil dibuat', 'alert' => 'success']);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            dd($e);
+        }catch (\Exception $e) {
+            DB::rollBack(); 
+            // dd($e);
             report($e);
-            return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'danger']);
+            return redirect()->route('invoice.index')->with(['pesan' => 'Invoice gagal dibuat', 'alert' => 'error']);
         }
-    }
+    }     
+
     public function print($invoice_id,$preview = false)
     {
         $preference = CompanySetting::where('company_id', Auth::user()->company_id)->get();
@@ -212,7 +218,7 @@ class InvoiceController extends Controller
                     if ($totaltermin) {
                         $remark.='Termin';
                         $c=" & ";
-                    }
+                    }       
                     $totaladd?$remark.="{$c}Addon":'';
                     $journalter = JournalHelper::code('SI')->clientId($invoice->client_id)->trsJournalId($invoice->invoice_id)->trsJournalNo($invoice->invoice_no)->appendTitle("{$remark} {$invoice->name} {$invoice->client->name}", 1)->make('Invoice', (($totaladd??0)+($totaltermin??0)));
                     $journalter->item($preference->where('name', 'receivables_account')->pluck('account_id')[0], 0);
@@ -480,4 +486,3 @@ class InvoiceController extends Controller
         return response($select);
     }
 }
-

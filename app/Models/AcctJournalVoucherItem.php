@@ -3,10 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class AcctJournalVoucherItem extends Model
 {
-
+    use HasFactory;
     /**
      * The attributes that are mass assignable.
      *
@@ -29,7 +30,13 @@ class AcctJournalVoucherItem extends Model
      */
     protected $hidden = [
     ];
+
+    public function journal(){
+        return $this->belongsTo(AcctJournalVoucher::class,'journal_voucher_item_id','journal_voucher_item_id');
+    }
     public function account() {
         return $this->belongsTo(AcctAccount::class,'account_id','account_id');
     }
+
+    
 }

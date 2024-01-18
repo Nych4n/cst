@@ -30,10 +30,9 @@ class SystemUserDataTable extends DataTable
     public function query(User $model)
     {
         return $model->newQuery()
-        ->join('system_user_group', 'system_user_group.user_group_id', 'system_user.user_group_id')
-        ->where('system_user.data_state', 0)
-        ->where('user_level',0);
+            ->join('system_user_group', 'system_user_group.user_group_id', 'system_user.user_group_id');
     }
+
 
     public function html()
     {
@@ -66,7 +65,7 @@ class SystemUserDataTable extends DataTable
         ];
     }
 
-    protected function filename()
+    protected function filename() : string
     {
         return 'Users_' . date('YmdHis');
     }

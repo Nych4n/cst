@@ -150,7 +150,8 @@ class SystemUserGroupController extends Controller
     public function delete($user_group_id)
     {
         $usergroup               = SystemUserGroup::findOrFail($user_group_id);
-        $usergroup->data_state   = 1;
+        $usergroup->delete();
+        
         if($usergroup->save()){
             $message = array(
                 'pesan' => 'User Group berhasil dihapus',

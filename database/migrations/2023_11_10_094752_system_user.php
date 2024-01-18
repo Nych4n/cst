@@ -16,6 +16,7 @@ return new class extends Migration
         if(!Schema::hasTable('system_user')) {
         Schema::create('system_user', function (Blueprint $table) {
             $table->id('user_id');
+            $table->integer('user_level')->nullable();
             $table->unsignedBigInteger('user_group_id')->nullable();
             $table->foreign('user_group_id')->references('user_group_id')->on('system_user_group')->onUpdate('cascade')->onDelete('set null');
             $table->unsignedBigInteger('branch_id')->nullable();
@@ -42,6 +43,7 @@ return new class extends Migration
          // Insert admin user
         DB::table('system_user')->insert(array(
                 'username' => 'administrator',
+                'user_level' => 1,
                 'user_group_id' => 1,
                 'branch_id' => 1,
                 'company_id' => 1,

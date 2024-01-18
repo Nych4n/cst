@@ -35,4 +35,8 @@ class CoreClient extends Model
      public function member() {
         return $this->hasMany(CoreClientMember::class,'client_id','client_id');
      }
+     public function products()
+     {
+         return $this->hasMany(CoreProduct::class, 'client_id', 'client_id');
+     }
 }

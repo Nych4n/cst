@@ -17,15 +17,15 @@
                     <div class="row mb-6">
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Awal') }}</label>
-                            <input type="text" name="start_date" id="start_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                            <input type="date" name="start_date" id="start_date"
+                                class=" form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('start_date', empty($session['start_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['start_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-form-label fw-bold fs-6 required">{{ __('Tanggal Akhir') }}</label>
-                            <input type="text" name="end_date" id="end_date"
-                                class="date form-control form-control-lg form-control-solid" placeholder="No. Identitas"
+                            <input type="date" name="end_date" id="end_date"
+                                class="  form-control form-control-lg form-control-solid" placeholder="No. Identitas"
                                 value="{{ old('end_date', empty($session['end_date']) ? date('d-m-Y') : date('d-m-Y', strtotime($session['end_date'])) ?? '') }}"
                                 autocomplete="off" />
                         </div>
@@ -96,12 +96,13 @@
                                 </tr>
                             @else
                                 @php
-                                    $no = 1;
+                                    $id = 0;
                                 @endphp
                                 @foreach ($acctjournalvoucher as $val)
                                     @php
                                         $i = 1;
                                     @endphp
+                                    {{-- $val; --}}
                                     @foreach ($val->items as $row)
                                         @php
                                             if ($row['journal_voucher_debit_amount'] != 0) {
@@ -116,29 +117,36 @@
                                             <tr>
                                                 <td style="text-align:center; background-color:lightgrey">
                                                     {{ $no++ }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $val['transaction_module_code'] }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $val['journal_voucher_description'] }}</td>
                                                 <td style="text-align:center; background-color:lightgrey">
                                                     {{ date('d-m-Y', strtotime($val['journal_voucher_date'])) }}</td>
                                                 <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $row->account->account_code }}</td>
+                                                    {{ $val['journal_voucher_description'] }}</td>
                                                 <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $row->account->account_name }}</td>
+                                                    {{ $row->account->account_code??'' }}</td>
+                                                <td style="text-align:left; background-color:lightgrey">
+                                                    {{ $row->account->account_name??'' }}</td>
                                                 <td style="text-align:right; background-color:lightgrey">
                                                     {{ number_format($nominal, 2) }}</td>
-                                                <td style="text-align:right; background-color:lightgrey">
+                                                <td style="text-align:center; background-color:lightgrey">
                                                     {{ $status }}</td>
+                                                <td style="text-align:center; background-color:lightgrey">
+                                                    <a href="{{ route ('journal-voucher.print',$val->journal_voucher_id) }}" class="btn btn-primary">
+                                                        <i class="bi bi-file-earmark-pdf"></i> Cetak
+                                                    </a>         
+                                                    {{-- <a href="{{ route('journal-voucher.reset-elements-add') }}" class="btn btn-danger">
+                                                        <i class="bi bi-file-earmark-pdf"></i> Reset
+                                                    </a> --}}
+                                                    
+                                                </td>
                                             </tr>
                                         @else
                                             <tr>
-                                                <td style="text-align:center"></td>
+                                                <td style="text-a lign:center"></td>
                                                 <td></td>
                                                 <td></td>
                                                 <td></td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_code }}</td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_name }}</td>
+                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_code??'' }}</td>
+                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_name??'' }}</td>
                                                 <td style="text-align:right;">{{ number_format($nominal, 2) }}</td>
                                                 <td style="text-align:right;">{{ $status }}</td>
                                             </tr>
@@ -173,3 +181,13 @@
         </div>
     </div>
 </x-base-layout>
+<script>
+    // Mendapatkan tanggal hari ini
+    const today = new Date().toISOString().split('T')[0];
+    
+    // Mengatur nilai default ke input tanggal mulai
+    document.getElementById('start_date').value = today;
+    
+    // Mengatur nilai default ke input tanggal akhir
+    document.getElementById('end_date').value = today;
+</script>
