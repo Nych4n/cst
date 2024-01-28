@@ -1,77 +1,74 @@
 @php
-    use App\Http\Controllers\BalanceSheetController;
-    $day 	= date('d');
-    $month 	= empty($session['month_period']) ? date('m') : $session['month_period'];
-    $year 	= empty($session['year_period']) ? date('Y') : $session['year_period'];
+use App\Http\Controllers\BalanceSheetController;
+$day = date('d');
+$month = empty($session['month_period']) ? date('m') : $session['month_period'];
+$year = empty($session['year_period']) ? date('Y') : $session['year_period'];
 
-    if($month == 12){
-        $last_month 	= 01;
-        $last_year 		= $year + 1;
-    } else {
-        $last_month 	= $month + 1;
-        $last_year 		= $year;
-    }
+if($month == 12){
+$last_month = 01;
+$last_year = $year + 1;
+} else {
+$last_month = $month + 1;
+$last_year = $year;
+}
 
-    switch ($month) {
-        case '01':
-            $month_name = "Januari";
-            break;
-        case '02':
-            $month_name = "Februari";
-            break;
-        case '03':
-            $month_name = "Maret";
-            break;
-        case '04':
-            $month_name = "April";
-            break;
-        case '05':
-            $month_name = "Mei";
-            break;
-        case '06':
-            $month_name = "Juni";
-            break;
-        case '07':
-            $month_name = "Juli";
-            break;
-        case '08':
-            $month_name = "Agustus";
-            break;
-        case '09':
-            $month_name = "September";
-            break;
-        case '10':
-            $month_name = "Oktober";
-            break;
-        case '11':
-            $month_name = "November";
-            break;
-        case '12':
-            $month_name = "Desember";
-            break;
-        
-        default:
-            break;
-    }
+switch ($month) {
+case '01':
+$month_name = "Januari";
+break;
+case '02':
+$month_name = "Februari";
+break;
+case '03':
+$month_name = "Maret";
+break;
+case '04':
+$month_name = "April";
+break;
+case '05':
+$month_name = "Mei";
+break;
+case '06':
+$month_name = "Juni";
+break;
+case '07':
+$month_name = "Juli";
+break;
+case '08':
+$month_name = "Agustus";
+break;
+case '09':
+$month_name = "September";
+break;
+case '10':
+$month_name = "Oktober";
+break;
+case '11':
+$month_name = "November";
+break;
+case '12':
+$month_name = "Desember";
+break;
 
-    $period = $day." ".$month_name." ".$year;
+default:
+break;
+}
 
-    $year_now = date('Y');
-    for($i=($year_now-2); $i<($year_now+2); $i++){
-        $yearlist[$i] = $i;
-    } 
-@endphp
+$period = $day." ".$month_name." ".$year;
 
-<x-base-layout>
+$year_now = date('Y');
+for($i=($year_now-2); $i<($year_now+2); $i++){ $yearlist[$i]=$i; } @endphp <x-base-layout>
     <div class="card">
-        <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse" data-bs-target="#kt_card_collapsible">
+        <div class="card-header collapsible cursor-pointer rotate" data-bs-toggle="collapse"
+            data-bs-target="#kt_card_collapsible">
             <h3 class="card-title">Filter</h3>
             <div class="card-toolbar rotate-180">
                 <span class="bi bi-chevron-up fs-2">
                 </span>
             </div>
         </div>
-        <form id="kt_filter_savings_account_form" class="form" method="POST" action="{{ route('balance-sheet.filter') }}" enctype="multipart/form-data">
+        <form id="kt_filter_savings_account_form" class="form" method="POST"
+            action="{{ route('balance-sheet.filter') }}" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <div id="kt_card_collapsible" class="collapse">
@@ -79,35 +76,48 @@
                     <div class="row mb-6">
                         <div class="col-lg-4 fv-row">
                             <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('Periode') }}</label>
-                            <select name="month_period" id="month_period" aria-label="{{ __('Periode') }}" data-control="select2" data-placeholder="{{ __('Pilih Periode..') }}" class="form-select form-select-solid form-select-lg">
+                            <select name="month_period" id="month_period" aria-label="{{ __('Periode') }}"
+                                data-control="select2" data-placeholder="{{ __('Pilih Periode..') }}"
+                                class="form-select form-select-solid form-select-lg">
                                 <option value="">{{ __('Pilih Periode..') }}</option>
                                 @foreach($monthlist as $key => $value)
-                                    <option data-kt-flag="{{ $key }}" value="{{ $key }}" {{ $key == old('month_period', empty($session['month_period']) ? date('m') : $session['month_period'] ?? '') ? 'selected' :'' }}>{{ $value }}</option>
+                                <option data-kt-flag="{{ $key }}" value="{{ $key }}"
+                                    {{ $key == old('month_period', empty($session['month_period']) ? date('m') : $session['month_period'] ?? '') ? 'selected' :'' }}>
+                                    {{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-lg-4 col-form-label fw-bold fs-6 required">{{ __('Tahun') }}</label>
-                            <select name="year_period" id="year_period" aria-label="{{ __('Tahun') }}" data-control="select2" data-placeholder="{{ __('Pilih Tahun..') }}" class="form-select form-select-solid form-select-lg">
+                            <select name="year_period" id="year_period" aria-label="{{ __('Tahun') }}"
+                                data-control="select2" data-placeholder="{{ __('Pilih Tahun..') }}"
+                                class="form-select form-select-solid form-select-lg">
                                 <option value="">{{ __('Pilih Tahun..') }}</option>
                                 @foreach($yearlist as $key => $value)
-                                    <option data-kt-flag="{{ $key }}" value="{{ $key }}" {{ $key == old('year_period', empty($session['year_period']) ? date('Y') : $session['year_period'] ?? '') ? 'selected' :'' }}>{{ $value }}</option>
+                                <option data-kt-flag="{{ $key }}" value="{{ $key }}"
+                                    {{ $key == old('year_period', empty($session['year_period']) ? date('Y') : $session['year_period'] ?? '') ? 'selected' :'' }}>
+                                    {{ $value }}</option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-lg-4 fv-row">
                             <label class="col-lg-4 col-form-label fw-bold fs-6">{{ __('Cabang') }}</label>
-                            <select name="branch_id" id="branch_id" aria-label="{{ __('Cabang') }}" data-control="select2" data-placeholder="{{ __('Pilih cabang..') }}" data-allow-clear="true" class="form-select form-select-solid form-select-lg">
+                            <select name="branch_id" id="branch_id" aria-label="{{ __('Cabang') }}"
+                                data-control="select2" data-placeholder="{{ __('Pilih cabang..') }}"
+                                data-allow-clear="true" class="form-select form-select-solid form-select-lg">
                                 <option value="">{{ __('Pilih cabang..') }}</option>
                                 @foreach($corebranch as $key => $value)
-                                    <option data-kt-flag="{{ $value['branch_id'] }}" value="{{ $value['branch_id'] }}" {{ $value['branch_id'] == old('branch_id', $session['branch_id'] ?? '') ? 'selected' :'' }}>{{ $value['branch_name'] }}</option>
+                                <option data-kt-flag="{{ $value['branch_id'] }}" value="{{ $value['branch_id'] }}"
+                                    {{ $value['branch_id'] == old('branch_id', $session['branch_id'] ?? '') ? 'selected' :'' }}>
+                                    {{ $value['branch_name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer d-flex justify-content-end py-6 px-9">
-                    <a href="{{ route('balance-sheet.reset-filter') }}" class="btn btn-danger me-2" id="kt_filter_cancel">
+                    <a href="{{ route('balance-sheet.reset-filter') }}" class="btn btn-danger me-2"
+                        id="kt_filter_cancel">
                         {{__('Batal')}}
                     </a>
                     <button type="submit" class="btn btn-success" id="kt_filter_search">
@@ -129,7 +139,7 @@
             <div class="table-responsive">
                 <div class="row mb-6">
                     <table class="table table-rounded border gy-7 gs-7 show-border">
-                    <thead>
+                        <thead>
                             <tr align="center">
                                 <th colspan="2"><b>LAPORAN NERACA</b></th>
                             </tr>
@@ -512,4 +522,4 @@
             </a>
         </div>
     </div>
-</x-base-layout>
+    </x-base-layout>

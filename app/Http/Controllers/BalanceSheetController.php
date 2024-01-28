@@ -105,7 +105,6 @@ class BalanceSheetController extends Controller
     public function getBranchName($branch_id)
     {
         $data = CoreBranch::where('branch_id', $branch_id)
-        ->where('data_state',0)
         ->first();
 
         if (empty($data)) {
