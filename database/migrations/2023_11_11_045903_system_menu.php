@@ -34,6 +34,7 @@ return new class extends Migration
                [ 'id_menu' => 52, 'id' => 'journal-voucher',    'type' => 'file','text' => 'Jurnal Umum','parent' => "5",'menu_level' => "2",],
                [ 'id_menu' => 53, 'id' => 'journal-memorial',   'type' => 'file','text' => 'Jurnal Memorial','parent' => "5",'menu_level' => "2",],
                [ 'id_menu' => 54, 'id' => 'balance-sheet',      'type' => 'file','text' => 'Laporan Neraca','parent' => "5",'menu_level' => "2",],
+               [ 'id_menu' => 55, 'id' => 'profit-loss-report', 'type' => 'file','text' => 'Laporan Laba Rugi','parent' => "5",'menu_level' => "2",],
                [ 'id_menu' => 6,  'id' => '#',                  'type' => 'folder','text' => 'Preferensi','parent' => "#",'menu_level' => "1",],
                [ 'id_menu' => 61, 'id' => 'preference-company', 'type' => 'file','text' => 'Perusahaan','parent' => "6",'menu_level' => "2",],
                [ 'id_menu' => 62, 'id' => 'product-type',       'type' => 'file','text' => 'Tipe Produk','parent' => "6",'menu_level' => "2",],

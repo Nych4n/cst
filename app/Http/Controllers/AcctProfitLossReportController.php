@@ -3,20 +3,21 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
-use App\Models\AcctAccount;
-use App\Models\AcctAccountBalanceDetail;
-use App\Models\AcctAccountMutation;
-use App\Models\AcctAccountOpeningBalance;
-use App\Models\AcctJournalVoucherItem;
-use App\Models\AcctProfitLoss;
-use App\Models\AcctProfitLossReport;
-use App\Models\AcctRecalculateLog;
 use App\Models\CoreBranch;
-use App\Models\PreferenceCompany;
+use App\Models\AcctAccount;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use App\Helpers\Configuration;
+use App\Models\AcctProfitLoss;
 use Elibyy\TCPDF\Facades\TCPDF;
+use App\Models\PreferenceCompany;
+use App\Models\AcctJournalVoucher;
+use App\Models\AcctRecalculateLog;
+use Illuminate\Support\Facades\DB;
+use App\Models\AcctAccountMutation;
+use App\Models\AcctProfitLossReport;
+use App\Models\AcctJournalVoucherItem;
+use App\Models\AcctAccountBalanceDetail;
+use App\Models\AcctAccountOpeningBalance;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -34,15 +35,15 @@ class AcctProfitLossReportController extends Controller
             $sessiondata['branch_id']                   = auth()->user()->branch_id;
         }
         
-        $monthlist              = array_filter(Configuration::Month());
+        $monthlist              = Configuration::Month();
         $profitlossreporttype   = array_filter(Configuration::ProfitLossReportType());
 
         $corebranch             = CoreBranch::select('branch_id', 'branch_name')
-        ->where('data_state', 0)
+        // ->where('data_state', 0)
         ->get();
 
         $acctaccount = AcctAccount::select('account_id', 'account_name')
-        ->where('data_state', 0)
+        // ->where('data_state', 0)
         ->get();
 
         $company_name = PreferenceCompany::first()->company_name;
@@ -500,7 +501,7 @@ class AcctProfitLossReportController extends Controller
 
     public function export(){
         $spreadsheet        = new Spreadsheet();
-        $monthlist 			= array_filter(Configuration::Month());
+        // $monthlist 			= array_filter(Configuration::Month());
         $preferencecompany 	= PreferenceCompany::first();
 
         $sessiondata = session()->get('filter_profitlossreport');
@@ -533,7 +534,7 @@ class AcctProfitLossReportController extends Controller
         ->branch_name;
 
         if ($sessiondata['profit_loss_report_type'] == 1){
-            $period = $monthlist[$sessiondata['start_month_period']]."-".$monthlist[$sessiondata['end_month_period']]." ".$sessiondata['year_period'];
+            // $period = $monthlist[$sessiondata['start_month_period']]."-".$monthlist[$sessiondata['end_month_period']]." ".$sessiondata['year_period'];
         } else {
             $period = $sessiondata['year_period'];
         }
@@ -1247,20 +1248,56 @@ class AcctProfitLossReportController extends Controller
     }
 
     public static function getAccountAmount($account_id, $month_start, $month_end, $year, $profit_loss_report_type, $branch_id){
-        if($profit_loss_report_type == 1){
-            $account_amount = AcctAccountMutation::where('account_id', $account_id)
-            ->where('branch_id', $branch_id)
-            ->where('month_period', '>=', $month_start)
-            ->where('month_period', '<=', $month_end)
-            ->where('year_period', $year)
-            ->sum('last_balance');
-        }else if($profit_loss_report_type == 2){
-            $account_amount = AcctAccountMutation::where('account_id', $account_id)
-            ->where('branch_id', $branch_id)
-            ->where('year_period', $year)
-            ->sum('last_balance');
-        }
+        // if($profit_loss_report_type == 1){
+        //     $account_amount = AcctAccountMutation::where('account_id', $account_id)
+        //     ->where('branch_id', $branch_id)
+        //     ->where('month_period', '>=', $month_start)
+        //     ->where('month_period', '<=', $month_end)
+        //     ->where('year_period', $year)
+        //     ->sum('last_balance');
+        // }else if($profit_loss_report_type == 2){
+        //     $account_amount = AcctAccountMutation::where('account_id', $account_id)
+        //     ->where('branch_id', $branch_id)
+        //     ->where('year_period', $year)
+        //     ->sum('last_balance');
+        // }
         
-        return $account_amount;
+        // return $account_amount;
+            $data = AcctJournalVoucher::join('acct_journal_voucher_item', 'acct_journal_voucher_item.journal_voucher_id', 'acct_journal_voucher.journal_voucher_id')
+            ->select('acct_journal_voucher_item.journal_voucher_amount', 'acct_journal_voucher_item.account_id_status')
+            ->whereMonth('acct_journal_voucher.journal_voucher_date', '>=', $month_start)
+            ->whereMonth('acct_journal_voucher.journal_voucher_date', '<=', $month_end)
+            ->whereYear('acct_journal_voucher.journal_voucher_date', $year)
+            // ->where('acct_journal_voucher.data_state', 0)
+            ->where('acct_journal_voucher.branch_id', $branch_id)
+            ->where('acct_journal_voucher_item.account_id', $account_id)
+            // ->where('acct_journal_voucher.company_id', Auth::user()->company_id)
+            ->get();
+            $data_first = AcctJournalVoucher::join('acct_journal_voucher_item', 'acct_journal_voucher_item.journal_voucher_id', 'acct_journal_voucher.journal_voucher_id')
+                ->select('acct_journal_voucher_item.account_id_status')
+                ->whereMonth('acct_journal_voucher.journal_voucher_date', '>=', 01)
+                ->whereMonth('acct_journal_voucher.journal_voucher_date', '<=', $month_end)
+                ->whereYear('acct_journal_voucher.journal_voucher_date', $year)
+                // ->where('acct_journal_voucher.data_state', 0)
+                ->where('acct_journal_voucher.branch_id', $branch_id)
+                // ->where('acct_journal_voucher.company_id', Auth::user()->company_id)
+                ->where('acct_journal_voucher_item.account_id', $account_id)
+                ->first();
+
+            $amount = 0;
+            $amount1 = 0;
+            $amount2 = 0;
+            foreach ($data as $key => $val) {
+
+                if ($val['account_id_status'] == $data_first['account_id_status']) {
+                    $amount1 += $val['journal_voucher_amount'];
+                } else {
+                    $amount2 += $val['journal_voucher_amount'];
+                }
+                $amount = $amount1 - $amount2;
+            }
+            //dd($amount);
+
+            return $amount;
     }
 }

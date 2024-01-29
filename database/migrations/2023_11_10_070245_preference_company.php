@@ -15,6 +15,7 @@ return new class extends Migration
         if(!Schema::hasTable('preference_company')) {
             Schema::create('preference_company', function (Blueprint $table) {
                 $table->id('company_id');
+                $table->unsignedBigInteger('account_income_tax_id')->nullable();
                 $table->string('company_name',50)->nullable();
                 $table->text('company_address')->nullable();
                 $table->text('logo')->nullable();
