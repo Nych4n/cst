@@ -36,9 +36,9 @@
                                 class="form-select form-select-solid form-select-lg">
                                 <option value="">{{ __('Pilih') }}</option>
                                 @foreach ($corebranch as $key => $value)
-                                    <option data-kt-flag="{{ $value['branch_id'] }}" value="{{ $value['branch_id'] }}"
-                                        {{ $value['branch_id'] == old('branch_id', $session['branch_id'] ?? '') ? 'selected' : '' }}>
-                                        {{ $value['branch_name'] }}</option>
+                                <option data-kt-flag="{{ $value['branch_id'] }}" value="{{ $value['branch_id'] }}"
+                                    {{ $value['branch_id'] == old('branch_id', $session['branch_id'] ?? '') ? 'selected' : '' }}>
+                                    {{ $value['branch_name'] }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -86,81 +86,83 @@
                         </thead>
                         <tbody>
                             @php
-                                $no = 1;
-                                $totaldebet = 0;
-                                $totalkredit = 0;
+                            $no = 1;
+                            $totaldebet = 0;
+                            $totalkredit = 0;
                             @endphp
                             @if (count($acctjournalvoucher) == 0)
-                                <tr>
-                                    <td colspan="8" style="text-align: center">Data Kosong</td>
-                                </tr>
+                            <tr>
+                                <td colspan="8" style="text-align: center">Data Kosong</td>
+                            </tr>
                             @else
-                                @php
-                                    $id = 0;
-                                @endphp
-                                @foreach ($acctjournalvoucher as $val)
-                                    @php
-                                        $i = 1;
-                                    @endphp
-                                    {{-- $val; --}}
-                                    @foreach ($val->items as $row)
-                                        @php
-                                            if ($row['journal_voucher_debit_amount'] != 0) {
-                                                $nominal = $row['journal_voucher_debit_amount'];
-                                                $status = 'D';
-                                            } elseif ($row['journal_voucher_credit_amount'] != 0) {
-                                                $nominal = $row['journal_voucher_credit_amount'];
-                                                $status = 'K';
-                                            }
-                                        @endphp
-                                        @if ($i == 1)
-                                            <tr>
-                                                <td style="text-align:center; background-color:lightgrey">
-                                                    {{ $no++ }}</td>
-                                                <td style="text-align:center; background-color:lightgrey">
-                                                    {{ date('d-m-Y', strtotime($val['journal_voucher_date'])) }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $val['journal_voucher_description'] }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $row->account->account_code??'' }}</td>
-                                                <td style="text-align:left; background-color:lightgrey">
-                                                    {{ $row->account->account_name??'' }}</td>
-                                                <td style="text-align:right; background-color:lightgrey">
-                                                    {{ number_format($nominal, 2) }}</td>
-                                                <td style="text-align:center; background-color:lightgrey">
-                                                    {{ $status }}</td>
-                                                <td style="text-align:center; background-color:lightgrey">
-                                                    <a href="{{ route ('journal-voucher.print',$val->journal_voucher_id) }}" class="btn btn-primary">
-                                                        <i class="bi bi-file-earmark-pdf"></i> Cetak
-                                                    </a>         
-                                                    {{-- <a href="{{ route('journal-voucher.reset-elements-add') }}" class="btn btn-danger">
-                                                        <i class="bi bi-file-earmark-pdf"></i> Reset
-                                                    </a> --}}
-                                                    
-                                                </td>
-                                            </tr>
-                                        @else
-                                            <tr>
-                                                <td style="text-a lign:center"></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_code??'' }}</td>
-                                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_name??'' }}</td>
-                                                <td style="text-align:right;">{{ number_format($nominal, 2) }}</td>
-                                                <td style="text-align:right;">{{ $status }}</td>
-                                            </tr>
-                                        @endif
-                                        @php
-                                            $i++;
-                                            $totaldebet += $row['journal_voucher_debit_amount'];
-                                            $totalkredit += $row['journal_voucher_credit_amount'];
-                                            if ($id != $row['journal_voucher_id']) {
-                                                $id = $row['journal_voucher_id'];
-                                            }
-                                        @endphp
-                                    @endforeach
-                                @endforeach
+                            @php
+                            $id = 0;
+                            @endphp
+                            @foreach ($acctjournalvoucher as $val)
+                            @php
+                            $i = 1;
+                            @endphp
+                            {{-- $val; --}}
+                            @foreach ($val->items as $row)
+                            @php
+                            if ($row['journal_voucher_debit_amount'] != 0) {
+                            $nominal = $row['journal_voucher_debit_amount'];
+                            $status = 'D';
+                            } elseif ($row['journal_voucher_credit_amount'] != 0) {
+                            $nominal = $row['journal_voucher_credit_amount'];
+                            $status = 'K';
+                            }
+                            @endphp
+                            @if ($i == 1)
+                            <tr>
+                                <td style="text-align:center; background-color:lightgrey">
+                                    {{ $no++ }}</td>
+                                <td style="text-align:center; background-color:lightgrey">
+                                    {{ date('d-m-Y', strtotime($val['journal_voucher_date'])) }}</td>
+                                <td style="text-align:left; background-color:lightgrey">
+                                    {{ $val['journal_voucher_description'] }}</td>
+                                <td style="text-align:left; background-color:lightgrey">
+                                    {{ $row->account->account_code??'' }}</td>
+                                <td style="text-align:left; background-color:lightgrey">
+                                    {{ $row->account->account_name??'' }}</td>
+                                <td style="text-align:right; background-color:lightgrey">
+                                    {{ number_format($nominal, 2) }}</td>
+                                <td style="text-align:center; background-color:lightgrey">
+                                    {{ $status }}</td>
+                                <td style="text-align:center; background-color:lightgrey">
+                                    <a href="{{ route ('journal-voucher.print',$val->journal_voucher_id) }}"
+                                        class="btn btn-primary">
+                                        <i class="bi bi-file-earmark-pdf"></i> Cetak
+                                    </a>
+                                    {{-- <a href="{{ route('journal-voucher.reset-elements-add') }}" class="btn
+                                    btn-danger">
+                                    <i class="bi bi-file-earmark-pdf"></i> Reset
+                                    </a> --}}
+
+                                </td>
+                            </tr>
+                            @else
+                            <tr>
+                                <td style="text-align:center"></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_code??'' }}</td>
+                                <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_name??'' }}</td>
+                                <td style="text-align:right;">{{ number_format($nominal, 2) }}</td>
+                                <td style="text-align:right;">{{ $status }}</td>
+                            </tr>
+                            @endif
+                            @php
+                            $i++;
+                            $totaldebet += $row['journal_voucher_debit_amount'];
+                            $totalkredit += $row['journal_voucher_credit_amount'];
+                            if ($id != $row['journal_voucher_id']) {
+                            $id = $row['journal_voucher_id'];
+                            }
+                            @endphp
+                            @endforeach
+                            @endforeach
                             @endif
                             <tr>
                                 <td colspan="5" align="right"><b>Total Debet</td>
@@ -182,12 +184,12 @@
     </div>
 </x-base-layout>
 <script>
-    // Mendapatkan tanggal hari ini
-    const today = new Date().toISOString().split('T')[0];
-    
-    // Mengatur nilai default ke input tanggal mulai
-    document.getElementById('start_date').value = today;
-    
-    // Mengatur nilai default ke input tanggal akhir
-    document.getElementById('end_date').value = today;
+// Mendapatkan tanggal hari ini
+const today = new Date().toISOString().split('T')[0];
+
+// Mengatur nilai default ke input tanggal mulai
+document.getElementById('start_date').value = today;
+
+// Mengatur nilai default ke input tanggal akhir
+document.getElementById('end_date').value = today;
 </script>

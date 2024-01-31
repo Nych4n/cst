@@ -134,7 +134,7 @@
             font-weight: 500;
         }
         .table td:first-child {
-            text-align: center !important;
+            /* text-align: center; */
         }
         .collapse.show {
             visibility: visible;
