@@ -105,7 +105,7 @@ class BalanceSheetController extends Controller
     public function getBranchName($branch_id)
     {
         $data = CoreBranch::where('branch_id', $branch_id)
-        ->where('data_state',0)
+        // ->where('data_state',0)
         ->first();
 
         if (empty($data)) {
@@ -141,12 +141,12 @@ class BalanceSheetController extends Controller
         }
         $branchname 					= $this->getBranchName($sesi['branch_id']);
         $preferencecompany 				= PreferenceCompany::first();
-        $acctbalancesheetreport_left    = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id1', 'acct_balance_sheet_report.account_code1', 'acct_balance_sheet_report.account_name1', 'acct_balance_sheet_report.report_formula1', 'acct_balance_sheet_report.report_operator1', 'acct_balance_sheet_report.report_type1', 'acct_balance_sheet_report.report_tab1', 'acct_balance_sheet_report.report_bold1', 'acct_balance_sheet_report.report_formula3', 'acct_balance_sheet_report.report_operator3')
+        $acctbalancesheetreport_left    = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id1', 'acct_balance_sheet_report.account_code1', 'acct_balance_sheet_report.account_name1', 'acct_balance_sheet_report.report_formula1', 'acct_balance_sheet_report.report_operator1', 'acct_balance_sheet_report.report_type1', 'acct_balance_sheet_report.report_tab1', 'acct_balance_sheet_report.report_bold1', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2')
         ->from('acct_balance_sheet_report')
         ->where('acct_balance_sheet_report.account_name1','!=','')
         ->orderBy('acct_balance_sheet_report.report_no', 'ASC')
         ->get();
-        $acctbalancesheetreport_right   = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id2', 'acct_balance_sheet_report.account_code2', 'acct_balance_sheet_report.account_name2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2', 'acct_balance_sheet_report.report_type2', 'acct_balance_sheet_report.report_tab2', 'acct_balance_sheet_report.report_bold2', 'acct_balance_sheet_report.report_formula3', 'acct_balance_sheet_report.report_operator3')
+        $acctbalancesheetreport_right   = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id2', 'acct_balance_sheet_report.account_code2', 'acct_balance_sheet_report.account_name2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2', 'acct_balance_sheet_report.report_type2', 'acct_balance_sheet_report.report_tab2', 'acct_balance_sheet_report.report_bold2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2')
         ->where('acct_balance_sheet_report.account_name2','!=','')
         ->orderBy('acct_balance_sheet_report.report_no', 'ASC')
         ->get();
@@ -577,12 +577,12 @@ class BalanceSheetController extends Controller
         }
 
         $preferencecompany 				= PreferenceCompany::first();
-        $acctbalancesheetreport_left    = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id1', 'acct_balance_sheet_report.account_code1', 'acct_balance_sheet_report.account_name1', 'acct_balance_sheet_report.report_formula1', 'acct_balance_sheet_report.report_operator1', 'acct_balance_sheet_report.report_type1', 'acct_balance_sheet_report.report_tab1', 'acct_balance_sheet_report.report_bold1', 'acct_balance_sheet_report.report_formula3', 'acct_balance_sheet_report.report_operator3')
+        $acctbalancesheetreport_left    = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id1', 'acct_balance_sheet_report.account_code1', 'acct_balance_sheet_report.account_name1', 'acct_balance_sheet_report.report_formula1', 'acct_balance_sheet_report.report_operator1', 'acct_balance_sheet_report.report_type1', 'acct_balance_sheet_report.report_tab1', 'acct_balance_sheet_report.report_bold1', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2')
         ->from('acct_balance_sheet_report')
         ->where('acct_balance_sheet_report.account_name1','!=','')
         ->orderBy('acct_balance_sheet_report.report_no', 'ASC')
         ->get();
-        $acctbalancesheetreport_right   = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id2', 'acct_balance_sheet_report.account_code2', 'acct_balance_sheet_report.account_name2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2', 'acct_balance_sheet_report.report_type2', 'acct_balance_sheet_report.report_tab2', 'acct_balance_sheet_report.report_bold2', 'acct_balance_sheet_report.report_formula3', 'acct_balance_sheet_report.report_operator3')
+        $acctbalancesheetreport_right   = AcctBalanceSheetReport::select('acct_balance_sheet_report.balance_sheet_report_id', 'acct_balance_sheet_report.report_no', 'acct_balance_sheet_report.account_id2', 'acct_balance_sheet_report.account_code2', 'acct_balance_sheet_report.account_name2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2', 'acct_balance_sheet_report.report_type2', 'acct_balance_sheet_report.report_tab2', 'acct_balance_sheet_report.report_bold2', 'acct_balance_sheet_report.report_formula2', 'acct_balance_sheet_report.report_operator2')
         ->where('acct_balance_sheet_report.account_name2','!=','')
         ->orderBy('acct_balance_sheet_report.report_no', 'ASC')
         ->get();
