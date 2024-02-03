@@ -13,6 +13,8 @@ return new class extends Migration
     {
         if(!Schema::hasTable('acct_journal_voucher')) {
             Schema::create('acct_journal_voucher', function (Blueprint $table) {
+                $table->charset = 'utf8mb4';
+                $table->collation = 'utf8mb4_general_ci';
                 $table->id('journal_voucher_id');
                 $table->unsignedInteger('branch_id')->nullable();
                 $table->unsignedBigInteger('client_id')->nullable();

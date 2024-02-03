@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent;
 
 class DatabaseSeeder extends Seeder
 {
-    /**
+    /** 
      * Seed the application's database.
      *
      * @return void

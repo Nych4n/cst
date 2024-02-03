@@ -13,6 +13,8 @@ return new class extends Migration
     {
         if(!Schema::hasTable('acct_journal_voucher_item')) {
             Schema::create('acct_journal_voucher_item', function (Blueprint $table) {
+                $table->charset = 'utf8mb4';
+                $table->collation = 'utf8mb4_general_ci';
                 $table->id('journal_voucher_item_id');
                 $table->unsignedBigInteger('journal_voucher_id')->nullable();
                 $table->foreign('journal_voucher_id')->references('journal_voucher_id')->on('acct_journal_voucher')->onUpdate('cascade')->onDelete('set null');
@@ -41,4 +43,4 @@ return new class extends Migration
     {
         Schema::drop('acct_journal_voucher_item');
     }
-};
+}; 
