@@ -146,11 +146,11 @@
                                 <td style="text-align:center"></td>
                                 <td></td>
                                 <td></td>
-                                <td></td>
                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_code??'' }}</td>
                                 <td>&nbsp;&nbsp;&nbsp;&nbsp;{{ $row->account->account_name??'' }}</td>
                                 <td style="text-align:right;">{{ number_format($nominal, 2) }}</td>
-                                <td style="text-align:right;">{{ $status }}</td>
+                                <td style="text-align:center;">{{ $status }}</td>
+                                <td ></td>
                             </tr>
                             @endif
                             @php
