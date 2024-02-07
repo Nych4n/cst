@@ -245,10 +245,18 @@ class JournalVoucherController extends Controller
     public function print($journal_voucher_id)
     {
         $preferencecompany 			= PreferenceCompany::first();
-        $acctjournalvoucher 		= AcctJournalVoucher::select('acct_journal_voucher.journal_voucher_id', 'acct_journal_voucher.journal_voucher_date', 'acct_journal_voucher.journal_voucher_description','acct_journal_voucher.journal_voucher_no', 'acct_journal_voucher.branch_id', 'core_branch.branch_name')
-        ->join('core_branch','acct_journal_voucher.branch_id','=','core_branch.branch_id')
-        ->where('acct_journal_voucher.journal_voucher_id', $journal_voucher_id)
-        ->first();
+        $acctjournalvoucher = AcctJournalVoucher::select(
+        'acct_journal_voucher.journal_voucher_id', 
+        'acct_journal_voucher.journal_voucher_date', 
+        'acct_journal_voucher.journal_voucher_description',
+        'acct_journal_voucher.journal_voucher_no', 
+        'acct_journal_voucher.branch_id', 
+        'core_branch.branch_name'
+    )
+    ->leftJoin('core_branch', 'acct_journal_voucher.branch_id', '=', 'core_branch.branch_id')
+    ->where('acct_journal_voucher.journal_voucher_id', $journal_voucher_id)
+    ->first();
+
         $acctjournalvoucheritem 	= AcctJournalVoucherItem::select('acct_journal_voucher_item.journal_voucher_item_id', 'acct_journal_voucher_item.journal_voucher_id', 'acct_journal_voucher_item.account_id', 'acct_journal_voucher_item.journal_voucher_credit_amount', 'acct_journal_voucher_item.journal_voucher_debit_amount', 'acct_account.account_code', 'acct_account.account_name', 'acct_journal_voucher_item.journal_voucher_amount', 'acct_journal_voucher_item.account_id_status')
         ->join('acct_account','acct_journal_voucher_item.account_id','=','acct_account.account_id')
         ->where('acct_journal_voucher_item.journal_voucher_id', $journal_voucher_id)
