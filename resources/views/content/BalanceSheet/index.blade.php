@@ -309,6 +309,8 @@
                                 <td style="width: 50%">
                                     <table class="table table-rounded border gy-7 gs-7 show-border">
                                         <?php
+                                        $grand_total_account_amount2 = 0;
+                                        $total_account_amount210	= 0;
                                             foreach ($acctbalancesheetreport_right as $key => $val) {
                                                 if($val['report_tab2'] == 0){
                                                     $report_tab2 = ' ';
